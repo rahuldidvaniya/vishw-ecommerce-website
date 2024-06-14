@@ -1,0 +1,435 @@
+
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+        <!--<section class="single-banner inner-section" style="background: url(images/single-banner.jpg) no-repeat center;">
+            <div class="container">
+                <h2>product simple</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="shop-4column.html">shop-4column</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">product-simple</li>
+                </ol>
+            </div>
+        </section>-->
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                PRODUCT DETAILS PART START
+        =======================================-->
+        <section class="inner-section" style="margin-top: 30px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="details-gallery">
+                            <div class="details-label-group">
+                                <label class="details-label new">new</label>
+                                <label class="details-label off">{{ product.get_percentage|floatformat:0 }}%</label>
+                            </div>
+                            <ul class="details-preview"> 
+                                <li><img src="{{ product.image.url }}" alt="product"></li>
+                                {% for p in p_image %}
+                                <li><img src="{{ p.images.url }}" alt="product"></li>
+                                <!--<li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>
+                                <li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>
+                                <li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>
+                                <li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>-->
+                                {% endfor %}
+                            </ul>
+                            
+                            <ul class="details-thumb">
+                                <li><img src="{{ product.image.url }}" alt="product"></li>
+                                {% for p in p_image %}
+                                <li><img src="{{ p.images.url }}" alt="product"></li>
+                                <!--<li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>
+                                <li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>
+                                <li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>
+                                <li><img src="{% static 'images/product/01.jpg' %}" alt="product"></li>-->
+                                {% endfor %}
+                            </ul>
+                            
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <ul class="product-navigation">
+                            {% if previous_product %}
+                                <li class="product-nav-prev">
+                                    <a href="{% url 'core:product-detail' previous_product.pid %}">
+                                        <i class="icofont-arrow-left"></i>
+                                        prev product
+                                        <span class="product-nav-popup">
+                                            <img src="{{ previous_product.image.url }}" alt="{{ previous_product.title }}">
+                                            <small>{{ previous_product.title|truncatechars:25 }}</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            
+                            {% if next_product %}
+                                <li class="product-nav-next">
+                                    <a href="{% url 'core:product-detail' next_product.pid %}">
+                                        next product
+                                        <i class="icofont-arrow-right"></i>
+                                        <span class="product-nav-popup">
+                                            <img src="{{ next_product.image.url }}" alt="{{ next_product.title }}">
+                                            <small>{{ next_product.title|truncatechars:25 }}</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        
+                        <div class="details-content">
+                            <h3 class="details-name"><a href="#">{{ product.title }}</a></h3>
+                            <div class="details-meta">
+                                <p>SKU:<span>{{ product.sku }}</span></p>
+                                <p>BRAND: <a href="{% url 'core:brand-product-list' product.brand.bid %}">{{ product.brand }}</a></p>
+
+                                
+
+                            </div>
+                            <div class="details-rating">
+                                 <p> <span> {{ avg_rating|floatformat:2 }} &nbsp;</span> </p>
+                                {% for star_number in "12345"|make_list %}
+                                    {% if star_number|add:0 <= average_rating|default_if_none:0|default:0 %}
+                                        <i class="active icofont-star"></i>
+                                    {% else %}
+                                        <i class="icofont-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="#reviews-section">({{ reviews.count }} reviews)</a>
+
+                            </div>
+                            
+                            
+                            
+                            <h3 class="details-price">
+                               
+                                    <del><span class="old-product-price-{{ product.id }}">₹{{ product.old_price }}</span></del>
+                                    <span>₹</span> <span class="current-product-price-{{ product.id }}"> {{ product.price }}</span>
+                               
+                            </h3>
+                            <p class="details-desc">{{ product.description|truncatechars:150|safe }}</p>
+                            <div class="details-list-group">
+                                <label class="details-list-title">tags:</label>
+                                <ul class="details-tag-list">
+                                    {% for t in product.tags.all %}
+                                    <li><a href="{% url 'core:tags' t.slug %}">{{ t.name }}</a></li>
+                                    {% endfor %}
+                                    
+                                </ul>
+                            </div>
+                           <!-- Add this section wherever you want to place the share button -->
+<div class="details-list-group">
+    <label class="details-list-title">Share:</label>
+    <ul class="details-share-list">
+        <!-- Share Button for Twitter -->
+        <li>
+            <a href="#" onclick="shareOnTwitter('{{ product.title }}', '{{ request.build_absolute_uri }}')" title="Share on Twitter">
+                <i class="icofont-twitter"></i>
+            </a>
+        </li>
+        <!-- Share Button for Facebook -->
+        <li>
+            <a href="#" onclick="shareOnFacebook('{{ product.title }}', '{{ request.build_absolute_uri }}')" title="Share on Facebook">
+                <i class="icofont-facebook"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="shareOnWhatsApp('{{ product.title }}', '{{ request.build_absolute_uri }}')" title="Share on WhatsApp">
+                <i class="icofont-brand-whatsapp"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    // Function to share on Twitter
+    function shareOnTwitter(title, url) {
+        var tweet = encodeURIComponent("I ♥ this product on Vishw! " + title + " " + url + " #buyonVishw via @vishwelectronics");
+        window.open("https://twitter.com/intent/tweet?text=" + tweet);
+    }
+
+    // Function to share on Facebook
+    function shareOnFacebook(title, url) {
+        var facebookShare = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+        window.open(facebookShare);
+
+    }
+   
+        // Function to share on WhatsApp
+        function shareOnWhatsApp(title, url) {
+            var message = "I ♥ this product on Vishw! " + title + " " + url + " #buyonVishw via vishwelectronics.com";
+            var whatsappLink = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
+            window.open(whatsappLink);
+        }
+   
+    
+</script>
+
+                            <div class="details-add-group">
+                                <!--<input type = "number" value="1" min="1" max="30"  name="" class = "styled-number-input margin-bottom: 10px product-quantity-{{ product.id }}" id="product-quantity">-->
+                                <div style="margin-bottom: 10px;"></div>
+                                <button type="submit" id="add-to-cart-btn-v6" class="product-add add-to-cart-btn-v6" data-index="{{ product.id }}" title="Add to Cart">
+                                    <i class="fas fa-shopping-basket"></i>
+                                    <input type="hidden" class="product-pid-{{ product.id }}" value="{{ product.pid }}">
+                                    <input type="hidden" class="product-image-{{ product.id }}" value="{{ product.image.url }}">
+                                    <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}">
+                                    <input type="hidden" class="product-title-{{ product.id }}" value="{{ product.title }}">
+                                    <input type="hidden" class="product-quantity-{{ product.id }}" value="1">
+                                    <input type="hidden" class="product-stock-{{ product.id }}" value="{{product.quantity}}">
+
+                                    <span>add to cart</span>
+                                </button>
+                                <!--<div class="product-action">
+                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                    <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                </div>-->
+                            </div>
+                            <div class="details-action-group">
+                                <a class="details-wish wish add-to-wishlist" data-product-item="{{product.id}}"  title="Add Your Wishlist">
+                                    <i class="icofont-heart"></i>
+                                    <span>add to wish</span>
+                                </a>
+                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                PRODUCT DETAILS PART END
+        =======================================-->
+
+
+        <!--=====================================
+                  PRODUCT TAB PART START
+        =======================================-->
+        <section class="inner-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product-details-frame">
+                            <h3 class="frame-title">Description</h3>
+                            <div class="tab-descrip">
+                                <p>{{ product.description|safe }}</p>
+                            </div>
+                        </div>
+                        <div class="product-details-frame">
+                            <h3 class="frame-title">Spacification</h3>
+                            <p> {{ product.specifications|safe }}
+                        </div>
+                        
+                        <div id="reviews-section" class="product-details-frame">
+                            <h3 class="frame-title">Reviews ({{ reviews.count }})</h3>
+                            <ul class="review-list">
+                                {% for r in reviews %}
+                                <li class="review-item">
+                                    <div class="review-media">
+                                        <a class="review-avatar" href="#">
+                                            {% if r.user.profile.image %}
+                                            <img src="{{ r.user.profile.image.url }}" alt="review">
+                                            {% else %}
+                                            <img src="{% static "images/user.png" %}" alt="review">
+                                            {% endif %}
+                                            
+
+                                        </a>
+                                        <h5 class="review-meta">
+                                            <a href="#">{{ r.user.username|title }}</a>
+                                            <span>{{ r.date|date:"d M, Y" }}</span>
+                                        </h5>
+                                    </div>
+                                    <ul class="review-rating">
+                                        {% for star in "12345" %}
+                                            {% if forloop.counter <= r.rating %}
+                                                <li class="icofont-ui-rating"></li>  {# Filled star #}
+                                            {% else %}
+                                                <li class="icofont-ui-rate-blank"></li>  {# Blank star #}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <p class="review-desc">{{ r.review }}</p>
+                                </li>
+                                {% endfor %}
+                                
+                            </ul>
+                        </div>
+
+                        {% if request.user.is_authenticated %}
+                        {% if make_review %}
+                            <div class="product-details-frame">
+                                <h3 class="frame-title add-review">Add Your Review</h3>
+                                <strong class="text-success" id="review-res"></strong>
+                                <form class="review-form hide-comment-form" id="template-review-form" data-product-id="{{ product.id }}">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="star-rating">
+                                                <input type="radio" name="rating" value="5" id="star-1"><label for="star-1"></label>
+                                                <input type="radio" name="rating" value="4" id="star-2"><label for="star-2"></label>
+                                                <input type="radio" name="rating" value="3" id="star-3"><label for="star-3"></label>
+                                                <input type="radio" name="rating" value="2" id="star-4"><label for="star-4"></label>
+                                                <input type="radio" name="rating" value="1" id="star-5"><label for="star-5"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="template-review" placeholder="Write your review here"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <button class="btn btn-inline" id="submit-template-review">
+                                                <i class="icofont-water-drop"></i>
+                                                <span>Submit Review</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        {% else %}
+                        <div class="col-lg-12">
+                            <div class="alert-info">
+                                <p>To submit a review, please note that product reviews are only available for customers who have purchased the item and once the order has been successfully delivered.</p>
+
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                    
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                    PRODUCT TAB PART END
+        =======================================-->
+
+
+        <!--=====================================
+                 PRODUCT RELATED PART START
+        =======================================-->
+        {% if products %}
+        <section class="inner-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        
+                        <div class="section-heading">
+                            <h2>related this items</h2>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                    {% for p in products %}
+                    <div class="col">
+                        
+                        <div class="product-card {% if p.quantity == 0 %} product-disable {% endif %}" id="product-card">
+                            <div class="product-media">
+                                <div class="product-label">
+                                    <!-- Assuming 'p' is your product instance in the loop -->
+                                     {% if p.sale %}
+                                     <label class="label-text sale">sale</label>
+                                     {% endif %}
+                                     <label class="label-text off">{{ p.get_percentage|floatformat:0 }}%</label>
+
+                                </div>
+                                <button class="product-wish wish add-to-wishlist" data-product-item="{{p.id}}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <a class="product-image" href="{% url 'core:product-detail' p.pid %}">
+                                    <img src="{{ p.image.url }}" alt="product">
+                                </a>
+                                <div class="product-widget">
+                                    <!--<a title="Product Compare" href="compare.html" class="fas fa-random"></a>-->
+                                    <a title="Product Video" href="{{ p.link_video }}" class="venobox fas fa-play" data-autoplay="true" data-vbtype="video"></a>
+                                    <a title="Product View" href="#" class="fas fa-eye quick-view-button" data-bs-toggle="modal" data-bs-target="#product-view-{{ p.id }}" data-product-id="{{ p.pid }}"></a>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-rating">
+                                    {% if p.average_rating %}
+                                        {% for star_number in "12345"|make_list %}
+                                            {% if star_number|add:0 <= p.average_rating|default_if_none:0 %}
+                                                <i class="active icofont-star"></i>
+                                            {% else %}
+                                                <i class="icofont-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <a href="{% url 'core:product-detail' p.pid %}">({{ p.reviews.count }})</a>
+                                    {% else %}
+                                        <!-- No reviews yet -->
+                                        <span>No reviews yet</span>
+                                    {% endif %}
+                                </div>
+                            
+                        
+                                
+                                <h6 class="product-name">
+                                   <a href="{% url 'core:product-detail' p.pid %}">{{ p.title|truncatechars:30 }}</a>
+                                </h6>
+                                <h6 class="product-price">
+                                    <del><span class="old-product-price-{{ p.id }}">₹{{ p.old_price }}</span></del>
+                                    <span>₹</span> <span class="current-product-price-{{ p.id }}"> {{ p.price }}</span>
+                                </h6>
+                                <button class="product-add add-to-cart-btn" title="Add to Cart" data-index="{{ p.id }}" id="add-to-cart-btn">
+                                    <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                    <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                    <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                    <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                    <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.title }}">
+                                    <input type="hidden" class="product-stock-{{ p.id }}" value="{{ p.quantity }}">
+                                    <i class="fas fa-shopping-basket"></i>
+
+
+                                    <span>add</span>
+                                </button>
+                                <!--<div class="product-action">
+                                    <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                    <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                    <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                </div>-->
+                            </div>
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-btn-25">
+                            <a href="{% url 'core:category-product-list' product.category.cid %}" class="btn btn-outline">
+                                <i class="fas fa-eye"></i>
+                                <span>view all related</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+        <!--=====================================
+                 PRODUCT RELATED PART END
+        =======================================-->
+
+
+       
+        {% endblock content %}
+
+
+        
+
+
+
+
+

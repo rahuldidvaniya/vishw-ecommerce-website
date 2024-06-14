@@ -1,0 +1,31 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+ <!--=====================================
+                      FAQ PART START
+        =======================================-->
+        <section class="inner-section faq-part" style="margin-top: 30px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="faq-parent">
+                            {% for t in TC %}
+                            <div class="faq-child">
+                                <div class="faq-que">
+                                    <button>{{ t.title }}</button>
+                                </div>
+                                <div class="faq-ans">
+                                    <p>{{ t.content|safe}}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                      FAQ PART END
+        =======================================-->
+        {% endblock content %}

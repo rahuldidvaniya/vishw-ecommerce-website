@@ -1,0 +1,131 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+
+       
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+        <section class="inner-section single-banner"id="cart-list" style="background: url(images/single-banner.jpg) no-repeat center;">
+            <div class="container">
+                <h2>cart</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href={% url 'core:index' %}>Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                </ol>
+            </div>
+        </section>
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    WISHLIST PART START
+        =======================================-->
+        <section class="inner-section wishlist-part">
+            {% if cart_data %}
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-scroll">
+                            <table class="table-list">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Serial</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">status</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">total</th>
+                                        <th scope="col">action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    {% for product_id, item in cart_data.items %}
+                                    <tr class="remove-cart-item">
+                                        <h6> {{ item.id }} </h6>
+                                       
+                                        <td class="table-serial"><h6>{{ forloop.counter }}</h6></td>
+       
+                                      
+
+                                        <td class="table-image"><img src="{{ item.image }}" alt="product"></td>
+                                        <td class="table-name"><a href={% url "core:product-detail" item.pid %}><h6>{{ item.title|truncatechars:20 }}</h6></a></td>
+                                        <td class="table-price"><h6><span></span><span class="update-product-price">₹{{ item.price }}</span></h6></td>
+                                        <td class="table-status"><h6 class="stock-out">{% if item.stock == 0 or item.stock == "0" %}
+                                            Stock out
+                                        {% else %}
+                                            In stock
+                                        {% endif %}
+                                         </h6></td>
+                                        <td class="table-price">
+                                            <p>
+                                                <h6>
+                                                    <input type="number" class="styled-number-input w-75 product-quantity-{{ product_id }} quantity-update" data-index="{{ product_id }}" id="product-quantity-cart" max="{{ item.stock }}" min="1" value="{{ item.qty }}" {% if item.stock == 0 or item.stock == "0" %}disabled{% endif %} oninput="checkQuantity(this)">
+                                                </h6>
+                                            </p>
+                                        </td>
+                                        
+                                        
+                                            
+                                        <td class="table-price product-total-{{ product_id }}"> <h6>₹{{ item.total_price }}</h6> </td>
+
+                                        <td class="table-action">
+                                            <a class="view" href="#" title="Quick View" data-bs-toggle="modal"data-bs-target="#product-view-{{ product_id }}" data-product-id="{{ item.product_id }}"><i class="fas fa-eye"></i></a>
+                                            <button class="trash delete-product" data-product="{{ product_id }}" title="Remove Wishlist"><i class="icofont-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center mt-5">
+                            <!--<button class="btn btn-outline">
+                                Load more items
+                            </button>-->
+                            <a class="cart-checkout-btn" href="{% url 'core:checkout' %}">
+                                <span class="checkout-label">Proceed to Checkout</span>
+                                <span class="checkout-price" id="cart-total-amount1">₹{{ cart_total_amount }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <section class="error-part">
+                <div class="container">
+                    <h1>Your cart is empty!</h1>
+                    <img class="img-fluid" src="{% static "images/d438a32e-765a-4d8b-b4a6-520b560971e8.webp" %}" alt="error">
+                    <h3>Add items to it now.</h3>
+                   
+                    <a href="{% url "core:product" %}">Shop now</a>
+                </div>
+            </section>
+            {% endif %}
+        </section>
+        <!--=====================================
+                    WISHLIST PART END
+        =======================================-->
+
+
+        
+
+
+
+
+        {% endblock content %}
+
+
+
+
+
+
+

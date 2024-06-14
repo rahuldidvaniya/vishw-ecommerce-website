@@ -1,0 +1,507 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+        <section class="inner-section single-banner" style="background: url(images/single-banner.jpg) no-repeat center;">
+            <div class="container">
+                <h2>my profile</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:index' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">profile</li>
+                </ol>
+            </div>
+        </section>
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    PROFILE PART START
+        =======================================-->
+        <section class="inner-section profile-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Personal Information</h4>
+                                <button data-bs-toggle="modal" data-bs-target="#profile-edit">edit profile</button>
+                            </div>
+                            <div class="account-content">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <div class="profile-image">
+                                            {% if request.user.is_authenticated %}
+                                                {% if profile.image %}
+                                                    <a href="#"><img src="{{ profile.image.url }}" alt="user"></a>
+                                                {% else %}
+                                                    <a href="#"><img src="{% static "images/user.png" %}" alt="user"></a>
+                                                {% endif %}
+                                            {% else %}
+                                                <a href="#"><img src="{% static "images/user.png" %}" alt="user"></a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label">first name</label>
+                                            <input class="form-control" type="text" value="{{ profile.first_name|default_if_none:"" }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label">last name</label>
+                                            <input class="form-control" type="text" value="{{ profile.last_name|default_if_none:"" }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label">email</label>
+                                            <input class="form-control" type="email" value="{{ profile.email|default_if_none:"" }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label">number</label>
+                                            <input class="form-control" type="number" value="{{ profile.phone|default_if_none:"" }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label">secondary number</label>
+                                            <input class="form-control" type="number" value="{{ profile.secondary_phone|default_if_none:"" }}" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!--<div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>contact number</h4>
+                                {% if profile.phone or profile.secondary_phone %}
+                                <button data-bs-toggle="modal" data-bs-target="#contact-add">Edit Contact</button>
+                            {% else %}
+                                <button data-bs-toggle="modal" data-bs-target="#contact-add">Add Contact</button>
+                            {% endif %}
+                            
+                            </div>
+                            <div class="account-content">
+                                <div class="row">
+                                    {% if profile.phone %}
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="profile-card contact active">
+                                            <h6>primary</h6>
+                                            <p>{{ profile.phone }}</p>
+                                            <ul>
+                                                <li><button class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#contact-edit"></button></li>
+                                                <li>
+                                                    <button class="trash icofont-ui-delete" 
+                                                            title="Remove This" 
+                                                            data-bs-dismiss="alert" 
+                                                            data-phone-type="{{ phone_type }}"
+                                                            data-phone-number="{{ phone_number }}">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% if profile.secondary_phone %}
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="profile-card contact">
+                                            <h6>secondary</h6>
+                                            <p>{{ profile.secondary_phone }}</p>
+                                            <ul>
+                                                <li><button class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#contact-edit"></button></li>
+                                                <li><button class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    
+                    <div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Delivery Address</h4>
+                                {% if request.user.userauths_addresses.all %}
+                                    <button data-bs-toggle="modal" data-bs-target="#address-add">Add Address</button>
+                                {% else %}
+                                    <button data-bs-toggle="modal" data-bs-target="#address-add">Add Address</button>
+                                {% endif %}
+                            </div>
+                            <div class="account-content">
+                                <div class="row">
+                                    {% for address in request.user.userauths_addresses.all %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="profile-card address {% if forloop.first %}active{% endif %}">
+                                            <h3>{{ address.title|capfirst }}</h3>
+                                            <h6>{{ address.first_name }} {{ address.last_name }} </h6>
+                                            <p>
+                                                {{ address.street_address }},
+                                                {{ address.city_district_town }},
+                                                {{ address.state }},
+                                                {{ address.pincode }}
+                                            </p>
+                                            <ul class="user-action">
+                                                <!--<li><button class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#address-edit"></button></li>-->
+                                                <li><button class="trash1 icofont-ui-delete" title="Remove This" data-bs-dismiss="alert" data-id="{{ address.id }}"></button></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <!--<div class="col-lg-12">
+                        <div class="account-card mb-0">
+                            <div class="account-title">
+                                <h4>payment option</h4>
+                                <button data-bs-toggle="modal" data-bs-target="#payment-add">add card</button>
+                            </div>
+                            <div class="account-content">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="payment-card payment active">
+                                            <img src="{% static 'images/payment/png/01.png' %}" alt="payment">
+                                            <h4>card number</h4>
+                                            <p>
+                                                <span>****</span>
+                                                <span>****</span>
+                                                <span>****</span>
+                                                <sup>1876</sup>
+                                            </p>
+                                            <h5>miron mahmud</h5>
+                                            <button class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="payment-card payment">
+                                            <img src="{% static 'images/payment/png/02.png' %}" alt="payment">
+                                            <h4>card number</h4>
+                                            <p>
+                                                <span>****</span>
+                                                <span>****</span>
+                                                <span>****</span>
+                                                <sup>1876</sup>
+                                            </p>
+                                            <h5>miron mahmud</h5>
+                                            <button class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="payment-card payment">
+                                            <img src="{% static 'images/payment/png/03.png' %}" alt="payment">
+                                            <h4>card number</h4>
+                                            <p>
+                                                <span>****</span>
+                                                <span>****</span>
+                                                <span>****</span>
+                                                <sup>1876</sup>
+                                            </p>
+                                            <h5>miron mahmud</h5>
+                                            <button class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                    PROFILE PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    MODAL ADD FORM START
+        =======================================-->
+        <!-- contact add form -->
+        <div class="modal fade" id="contact-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="contact-form" value="1"> <!-- Add a hidden field to identify the form -->
+                        <div class="form-title">
+                            <h3>add new contact</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">title</label>
+                            <select name="title" class="form-select">
+                                <option selected>choose title</option>
+                                <option value="primary">primary</option>
+                                <option value="secondary">secondary</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">number</label>
+                            <input name="number" class="form-control" type="text" placeholder="Enter your number">
+                        </div>
+                        <button class="form-btn" type="submit">save contact info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        
+
+        <!-- address add form -->
+        <div class="modal fade" id="address-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="address-form" value="1"> 
+                        <div class="form-title">
+                            <h3>Add New Address</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <select name="title" class="form-select">
+                                <option selected disabled>Choose Title</option>
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label"> first name</label>
+                            <input name="first_name" class="form-control" placeholder="Enter your first name"></input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> last name</label>
+                            <input name="last_name" class="form-control" placeholder="Enter your last name"></input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> Street Address</label>
+                            <textarea name="address" class="form-control" placeholder="Enter your street address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> City/District/Town </label>
+                            <input type="text" name="City/District/Town" class="form-control" placeholder="city/district/town">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> State </label>
+                            <input type="text" name="State" class="form-control" placeholder="State">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> Pincode </label>
+                            <input type="text" name="Pincode" class="form-control" placeholder="Pincode">
+                        </div>
+                            
+                        <button class="form-btn" type="submit">Save Address Info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        
+
+        <!-- payment add form -->
+        <div class="modal fade" id="payment-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form">
+                        <div class="form-title">
+                            <h3>add new payment</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">card number</label>
+                            <input class="form-control" type="text" placeholder="Enter your card number">
+                        </div>
+                        <button class="form-btn" type="submit">save card info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        <!--=====================================
+                    MODAL ADD FORM END
+        =======================================-->
+
+        
+        <!--=====================================
+                    MODAL EDIT FORM START
+        =======================================-->
+        <!-- profile edit form -->
+        <div class="modal fade" id="profile-edit">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form id="profile-form" class="modal-form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-title">
+                            <h3>edit profile info</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">profile image</label>
+                            <input name="image" class="form-control" type="file">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">first name</label>
+                            <input name="first_name" class="form-control" type="text" value="{{ profile.first_name|default_if_none:"" }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">last name</label>
+                            <input name="last_name" class="form-control" type="text" value="{{ profile.last_name|default_if_none:"" }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">email</label>
+                            <input name="email" class="form-control" type="email" value="{{ profile.email|default_if_none:"" }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Primary Number</label>
+                            <input name="phone" class="form-control" type="tel" pattern="^\d{10}$" value="{{ profile.phone|default_if_none:"" }}" title="Please enter exactly 10 digits">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Secondary Number</label>
+                            <input name="secondary_phone" class="form-control" type="tel" pattern="^\d{10}$" value="{{ profile.secondary_phone|default_if_none:"" }}" title="Please enter exactly 10 digits">
+                        </div>
+                        
+                        <!-- Add other fields as needed -->
+                        <button class="form-btn" type="submit">save profile info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        
+        
+        
+        
+
+        <!-- contact edit form -->
+        <div class="modal fade" id="contact-edit">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-title">
+                            <h3>edit contact info</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact type</label>
+                            <select class="form-select" name="contact_type">
+                                <option value="primary" selected>Primary</option>
+                                <option value="secondary">Secondary</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Number</label>
+                            <input class="form-control" type="text" name="phone_number" value="{{ profile.phone }}">
+                        </div>
+                        <div class="form-group" style="display: none;" id="secondary_phone_field">
+                            <label class="form-label">Secondary Number</label>
+                            <input class="form-control" type="text" name="secondary_phone_number" value="{{ profile.secondary_phone }}">
+                        </div>
+                        <button class="form-btn" type="submit">Save contact info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        
+
+        <!-- address edit form -->
+        <div class="modal fade" id="address-edit">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form id="address-form" class="modal-form" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="address-form" value="1"> 
+                        <div class="form-title">
+                            <h3>Add New Address</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <select name="title" class="form-select" required>
+                                <option selected disabled>Choose Title</option>
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input name="first_name" class="form-control" type="text" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input name="last_name" class="form-control" type="text" placeholder="Enter your last name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Street Address</label>
+                            <textarea name="address" class="form-control" placeholder="Enter your street address" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City/District/Town</label>
+                            <input type="text" name="city_district_town" class="form-control" placeholder="City/District/Town" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <input type="text" name="state" class="form-control" placeholder="State" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pincode</label>
+                            <input type="text" name="pincode" class="form-control" placeholder="Pincode" required>
+                        </div>
+                                
+                        <button id="submit-btn1" class="form-btn" type="submit">Save Address Info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+        
+        <script>
+            document.getElementById('submit-btn1').addEventListener('click', function(event) {
+                var form = document.getElementById('address-form');
+                var inputs = form.querySelectorAll('input, select, textarea');
+                var isValid = true;
+                
+                inputs.forEach(function(input) {
+                    if (input.hasAttribute('required') && !input.value.trim()) {
+                        isValid = false;
+                    }
+                });
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    alert('Please fill in all required fields.');
+                }
+            });
+        </script>
+        
+        
+        <!--=====================================
+                    MODAL EDIT FORM END
+        =======================================-->
+
+
+        
+        {% endblock content %}
+
+        
+
+
+
+
+

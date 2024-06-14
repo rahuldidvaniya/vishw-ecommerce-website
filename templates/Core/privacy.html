@@ -1,0 +1,42 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+        <!--=====================================
+                    PRIVACY PART START
+        =======================================-->
+        <section class="inner-section privacy-part" style="margin-top: 30px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <nav class="nav nav-pills flex-column" id="scrollspy">
+                            {% for policy in privacy_policies %}
+                            <a class="nav-link" href="#item-{{ policy.id }}">{{ policy.title }}</a>
+                            {% endfor %}
+                        </nav>
+                    </div>
+                    <div class="col-lg-9">
+                        <div data-bs-spy="scroll" data-bs-target="#scrollspy" data-bs-offset="0" tabindex="0">
+                            {% for policy in privacy_policies %}
+                            <div class="scrollspy-content" id="item-{{ policy.id }}">
+                                <h3>{{ policy.title }}</h3>
+                                <p>{{ policy.content|safe }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!--=====================================
+                    PRIVACY PART END
+        =======================================-->
+
+
+
+{% endblock %}
+
+
+
+
+

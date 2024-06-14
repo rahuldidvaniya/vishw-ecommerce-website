@@ -1,0 +1,98 @@
+
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+        <section class="inner-section single-banner" id="wishlist-list1" style="background: url(images/single-banner.jpg) no-repeat center;">
+            <div class="container">
+                <h2>wishlist</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url "core:index" %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">wishlist</li>
+                </ol>
+            </div>
+        </section>
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    WISHLIST PART START
+        =======================================-->
+        <section class="inner-section wishlist-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-scroll">
+                            {% if w.count == 0 %}
+                            <h6>No items in your wishlist </h6>
+                        {% else %}
+                            <table class="table-list">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Serial</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">description</th>
+                                        <th scope="col">status</th>
+                                        <th scope="col">shopping</th>
+                                        <th scope="col">action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+ 
+                                    {% for w in w %}
+                                    <tr>
+                                        <td class="table-serial"><h6>{{ forloop.counter }}</h6></td>
+                                        <td class="table-image"><img src="{{ w.product.image.url }}" alt="product"></td>
+                                        <td class="table-name"><a href="{% url "core:product-detail" w.product.pid %}"><h6>{{ w.product.title|truncatechars:25 }}</h6></a></td>
+                                        <td class="table-price"><h6><span>₹</span><span class="current-product-price-{{ w.product.id }}">{{ w.product.price }}</span></h6></td>
+                                        <td class="table-desc"><p>{{ w.product.description|truncatechars:70|safe }}<a href="{% url 'core:product-detail' w.product.pid %}">read more</a></p></td>
+                                        <td class="table-status"><h6 class="stock-out">{% if w.product.in_stock %} in stock {% else %} stock out {% endif %} </h6></td>
+                                        <td class="table-shop">
+                                            <button class="product-add add-to-cart-btn-v2" data-index="{{ w.product.id }}" id="add-to-cart-btn" title="Add to Cart">add to cart</button>
+                                            <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ w.product.id }}">
+                                            <input type="hidden" class="product-pid-{{ w.product.id }}" value="{{ w.product.pid }}">
+                                            <input type="hidden" class="product-image-{{ w.product.id }}" value="{{ w.product.image.url }}">
+                                            <input type="hidden" class="product-id-{{ w.product.id }}" value="{{ w.product.id }}">
+                                            <input type="hidden" class="product-title-{{ w.product.id }}" value="{{ w.product.title }}">
+                                            <input type ="hidden" class="old-product-price-{{ w.product.id }}" value="{{ w.product.old_price }}">
+                                            <input type="hidden" class="product-stock-{{ w.product.id }}" value="{{ w.product.quantity }}">
+                                            <input type="hidden" class="product-stock-{{ w.product.id }}" value="{{ w.product.id }}">
+                                            <div class="product-action">
+                                                <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                                <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                                <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                            </div>
+                                        </td>
+                                        <td class="table-action">
+                                            <a class="view" href="#" title="Quick View" data-bs-toggle="modal"data-bs-target="#product-view-{{ w.product.id }}" data-product-id="{{ w.product.id }}"><i class="fas fa-eye"></i></a>
+                                            <button class="trash delete-wishlist-product" href="#" data-wishlist-product="{{ w.id }}" title="Remove Wishlist"><i class="icofont-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                    WISHLIST PART END
+        =======================================-->
+
+
+     
+     {% endblock %}
+
+
+
+
+
+

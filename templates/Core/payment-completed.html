@@ -1,0 +1,185 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+<!--================
+
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+   
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    INVOICE PART START
+        =======================================-->
+        <section class="inner-section invoice-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert-info">
+                            <p>Hey {{ request.user|title }}, We have recieved your order.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>order recieved</h4>
+                            </div>
+                            <div class="account-content">
+                                <div class="invoice-recieved">
+                                    <h6>order number <span>{{ order_id }}</span></h6>
+                                    <h6>order date <span>{{ order_time|date:"jS F Y" }}</span></h6>
+                                    <h6>total amount <span>₹{{ cart_total_amount|floatformat:"0"|intcomma }}</span></h6>
+                                    {% if payment_method == 'cash_on_delivery' %}
+                                    <h6>Payment Method <span>Cash on Delivery</span></h6>
+                                {% else %}
+                                    <h6>Payment Method <span>PayPal</span></h6>
+                                {% endif %}
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Order Details</h4>
+                            </div>
+                            <div class="account-content">
+                                <ul class="invoice-details">
+                                    <li>
+                                        <h6>Total Item</h6>
+                                        <p>{{ total_quantity }} Items</p>
+                                    </li>
+                                    <li>
+                                        <h6>Order Time</h6>
+                                        <p>{{ order_time|time:"g.iA" }} {{ order_time|date:"d-m-Y" }}
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h6>Delivery</h6>
+                                        <p> within {{ delivery_time|date:"d-m-Y" }} 
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h6>Delivery Location</h6>
+                                       
+                                        <p><b>{{ selected_address.first_name }} {{ selected_address.last_name }}</b> - {{ selected_address.street_address }}, {{ selected_address.city_district_town }}, {{ selected_address.state }}-{{ selected_address.pincode }}</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Amount Details</h4>
+                            </div>
+                            <div class="account-content">
+                                <ul class="invoice-details">
+                                    <li>
+                                        <h6>Sub Total</h6>
+                                        <p>₹{{ sub_total_old_price }}</p>
+                                    </li>
+                                    <li>
+                                        <h6>discount</h6>
+                                        <p>₹{{ discount }}</p>
+                                    </li>
+                                    <li>
+                                        <h6>delivery fee </h6>
+                                        <p> ₹{{ delivery_fee }}
+                                    </li>
+                                    {% if payment_method == 'cash_on_delivery' %}
+                                    <li>
+
+                                        <h6>Payment Method</h6>
+                                        <p>Cash On Delivery</p>
+                                    </li>
+                                    {% else %}
+                                    <li>
+
+                                        <h6>Payment Method</h6>
+                                        <p>PayPal</p>
+                                    </li>
+                                    {% endif %}
+                                    <li>
+                                        <h6>Total<small>(Incl. VAT)</small></h6>
+                                        <p>₹{{ cart_total_amount|floatformat:"0"|intcomma }}</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="table-scroll">
+                            <table class="table-list">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Serial</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product_id, item in cart_data.items %}
+                                    <tr>
+                                        <td class="table-serial"><h6>{{ forloop.counter }}</h6></td>
+                                        <td class="table-image"><img src="{{ item.image }}" alt="product"></td>
+                                        <td class="table-name"><a href={% url "core:product-detail" item.pid %}><h6>{{ item.title|truncatechars:55 }}</h6></a></td>
+                    
+                                        <td class="table-price"><h6><span>₹</span>{{ item.price }}</h6></td>
+                                        <td class="table-quantity"><h6>{{ item.qty }}</h6></td>
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% if payment_method == 'cash_on_delivery' %}
+                <div class="row">
+                    <div class="col-lg-12 text-center mt-5">
+                        <a class="btn btn-inline" href="{% url "core:Orders" %}">
+                            <i class="icofont-download"></i>
+                            <span>track order</span>
+                        </a>
+                        <div class="back-home">
+                            <a href="{% url 'core:index' %}">Back to Home</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-lg-12 text-center mt-5">
+                        <a class="btn btn-inline" href="{% url "core:Invoice" %}">
+                            <i class="icofont-download"></i>
+                            <span>Download Invoice</span>
+                        </a>
+                        <div class="back-home">
+                            <a href="{% url 'core:index' %}">Back to Home</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        <!--=====================================
+                    INVOICE PART END
+        =======================================-->
+
+
+       
+
+        {% endblock content %}
+    
+
+
+
+

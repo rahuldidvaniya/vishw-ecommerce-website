@@ -1,0 +1,969 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--=====================================
+                    META TAG PART START
+        =======================================-->
+        <!-- REQUIRE META -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- AUTHOR META -->
+        <meta name="author" content"RahulKhatik">
+        <meta name="email" content="vishw_electronics@yahoo.com">
+        <meta name="profile" content="https://themeforest.net/user/mironcoder">
+
+        <!-- TEMPLATE META -->
+        <meta name="name" content="Greeny">
+        <meta name="title" content="Greeny - eCommerce HTML Template">
+        <meta name="keywords" content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, webshop, farm, grocery, natural, online store">
+        <!--=====================================
+                    META-TAG PART END
+        =======================================-->
+
+        <!-- WEBPAGE TITLE -->
+        <title>Vishw Electronics</title>
+
+        <!--=====================================
+                    CSS LINK PART START
+        =======================================-->
+        <!-- FAVICON -->
+        <link rel="icon" href=" {% static 'images/logo.png' %}">
+
+        <!-- FONTS -->
+        <link rel="stylesheet" href="{% static 'fonts/flaticon/flaticon.css' %}">
+        <link rel="stylesheet" href="{% static 'fonts/icofont/icofont.min.css' %}">
+        <link rel="stylesheet" href="{% static 'fonts/fontawesome/fontawesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'fonts/icofont/icofont.css' %}">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        
+        
+
+        <!-- VENDOR -->
+        <link rel="stylesheet" href="{% static 'vendor/venobox/venobox.min.css' %}">
+        <link rel="stylesheet" href="{% static 'vendor/slickslider/slick.min.css' %}">
+        <link rel="stylesheet" href="{% static 'vendor/niceselect/nice-select.min.css' %}">
+        <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+
+        <!-- CUSTOM -->
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+        <link rel="stylesheet" href="{% static 'css/product-details.css' %}">
+        <link rel="stylesheet" href="{% static 'css/invoice.css' %}">
+        <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+        <link rel="stylesheet" href="{% static 'css/brand-single.css' %}">
+        <link rel="stylesheet" href ="{% static 'css/wishlist.css' %}">
+        <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+        <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+        <link rel="stylesheet" href="{% static 'css/orderlist.css' %}">
+        <link rel="stylesheet" href="{% static 'css/error.css' %}">
+        <link rel="stylesheet" href="{% static 'css/privacy.css' %}">
+        <link rel="stylesheet" href="{% static 'css/faq.css' %}">
+
+
+
+        
+        <!-- Add this in the head section of your HTML -->
+        
+
+        <!-- Add this in the head section of your HTML -->
+
+
+
+        <!--=====================================
+                    CSS LINK PART END
+        =======================================-->
+    </head>
+    <body>
+        <div class="backdrop"></div>
+        <a class="backtop fas fa-arrow-up" href="#"></a>
+    
+        <!--=====================================
+                    HEADER PART START
+        =======================================-->
+        <header class="header-part">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-media-group">
+                        <button class="header-user"><img src="{% static 'images/user.png' %}" alt="user"></button>
+                        <a href="{% url 'core:index' %}"><img src="{% static 'images/logo.png' %}" alt="logo"></a>
+                        <button class="header-src"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <a href="{% url 'core:index' %}" class="header-logo">
+                        <img src="{% static 'images/logo.png' %}" alt="logo">
+                    </a>
+                    {% if request.user.is_authenticated %}
+                    {% if profile_picture %}
+                        <a href="{% url "core:dashboard" %}" class="header-widget" title="My Account">
+                            <img src="{{ profile_picture }}" alt="user">
+                            <span>Hi, {{ request.user.username }}</span>
+                        </a>
+                    {% else %}
+                        <!-- If user is authenticated but doesn't have a profile image, display a default image -->
+                        <a href="{% url "core:dashboard" %}" class="header-widget" title="My Account">
+                            <img src="{% static "images/user.png" %}" alt="user">
+                            <span>Hi, {{ request.user.username }}</span>
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url "userauths:login" %}" class="header-widget" title="login">
+                        <img src="{% static "images/user.png" %}" alt="user">
+                        <span>Join</span>
+                    </a>
+                {% endif %}
+                
+                
+
+
+                    <form class="header-form" action="{% url 'core:search' %}" method="GET">
+                        <input type="text" id="product-search" class="autocomplete" placeholder="Search for items..." name="q">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                    
+
+                    <div class="header-widget-group">
+                         <!--<a href="compare.html" class="header-widget" title="Compare List"> -->
+                            <!--<i class="fas fa-random"></i> -->
+                           <!-- <sup>0</sup> -->
+                        </a>
+                        <a href="{% url 'core:wishlist' %}" class="header-widget" title="Wishlist">
+                            <i class="fas fa-heart"></i>
+                            <sup id="wishlist-count">{{ wishlist.count }}</sup>
+                        </a>
+                        <a href="{% url 'core:cart' %}" class="header-widget" title="Cartlist">
+                            <i class="fas fa-shopping-basket"></i>
+                            <sup class="cart-items-count">{{ request.session.cart_data_obj|length }}</sup>
+                            <span>total price<small id="cart-total-amount">₹{{ cart_total_amount }}</small></span>
+                        </a>
+                        
+                    </div>
+                  
+                    
+
+                </div>
+            </div>
+
+                    </div>
+        </header>
+
+        <!--=====================================
+                    HEADER PART END
+        =======================================-->
+
+         
+       
+        
+        <!--=====================================
+                    NAVBAR PART START
+        =======================================-->
+        <nav class="navbar-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="navbar-content">
+                            <ul class="navbar-list">
+                                <li class="navbar-item dropdown">
+                                    <a class="navbar-link" href="{% url 'core:index' %}">home</a>
+                                     
+                                       
+                                </li>
+                                <li class="navbar-item">
+                                    <a class="navbar-link" href="{% url "core:product" %}">shop</a>
+                                   
+                                </li>
+                                {% if request.user.is_authenticated %}
+                                <li class="navbar-item">
+                                    <a class="navbar-link" href="{% url "core:Orders" %}">Orders</a>
+                                </li>
+                                {% endif %}
+                                <li class="navbar-item dropdown">
+                                    <a class="navbar-link dropdown-arrow" href="#">category</a>
+                                    <ul class="dropdown-position-list">
+                                        {% for c in categories %}
+                                        <li><a href="{% url 'core:category-product-list' c.cid %}">{{ c.title }}</a></li>
+                                        {% endfor %}
+                                        <hr>
+                                        <li><a href="{% url 'core:category' %}">All Categories</a></li>
+                                        
+                                    </ul>
+                                </li>
+                                <!--<li class="navbar-item dropdown">
+                                    <a class="navbar-link dropdown-arrow" href="#">pages</a>
+                                    <ul class="dropdown-position-list">
+                                        <li><a href="faq.html">faqs</a></li>
+                                        <li><a href="offer.html">offers</a></li>
+                                        <li><a href="profile.html">my profile</a></li>
+                                        <li><a href="wallet.html">my wallet</a></li>
+                                        <li><a href="about.html">about us</a></li>
+                                        <li><a href="contact.html">contact us</a></li>
+                                        <li><a href="privacy.html">privacy policy</a></li>
+                                        <li><a href="coming-soon.html">coming soon</a></li>
+                                        <li><a href="blank-page.html">blank page</a></li>
+                                        <li><a href="error.html">404 Error</a></li>
+                                        <li><a href="email-template.html">email template</a></li>
+                                    </ul>
+                                </li>-->
+                     <li class="navbar-item dropdown">
+    <a class="navbar-link dropdown-arrow" href="#">authentic</a>
+    <ul class="dropdown-position-list">
+        {% if request.user.is_authenticated %}
+            <li><a href={% url 'userauths:sign-out' %}>logout</a></li>
+            <li><a href="{% url "reset_password" %}">reset password</a></li>
+            <li><a href={% url 'userauths:change-password' %}>change password</a></li>
+        {% else %}
+            <li><a href={% url 'userauths:login' %}>login</a></li>
+            <li><a href={% url 'userauths:sign-up' %}>register</a></li>
+        {% endif %}
+    </ul>
+    
+    
+</li>
+<li class="navbar-item">
+    <a class="navbar-link" href={% url 'core:privacy-policy' %}> Privacy Policy </a>
+</li>
+<li class="navbar-item">
+    <a class="navbar-link" href={% url 'core:terms-conditions' %}> Terms and Condition </a>
+</li>
+
+
+
+                                <li class="navbar-item">
+                                    <a class="navbar-link" href={% url 'core:contact' %}>Contact us </a>
+                            </ul>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'warning' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                <strong>{{ message }}</strong>
+            </div>
+            <script>
+                // Function to remove the alert after a certain time
+                setTimeout(function() {
+                    $('.alert').fadeOut('slow', function() {
+                        $(this).remove();
+                    });
+                }, 5000); // 5000 milliseconds = 5 seconds. Change this value to adjust the duration.
+            </script>
+        {% endfor %}
+    {% endif %}
+    
+      
+        <!--=====================================
+                    NAVBAR PART END
+        =======================================-->
+
+
+
+        <!--=====================================
+                CATEGORY SIDEBAR PART START
+        =======================================-->
+        <aside class="category-sidebar">
+            <div class="category-header">
+                <h4 class="category-title">
+                    <i class="fas fa-align-left"></i>
+                    <span>categories</span>
+                </h4>
+                <button class="category-close"><i class="icofont-close"></i></button>
+            </div>
+           
+            <ul class="category-list">
+                {% for cd in categories %}
+                <li class="category-item">
+                    <a class="category-link" href="{% url 'core:category-product-list' cd.cid %}">
+                        <span>{{ cd.title }}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+          
+            <div class="category-footer">
+                <p>All Rights Reserved by <a href="#">Vishw</a></p>
+            </div>
+        </aside>
+        <!--=====================================
+                CATEGORY SIDEBAR PART END
+        =======================================-->
+
+
+        <!--=====================================
+                  CART SIDEBAR PART START
+        =======================================-->
+        <!--<aside class="cart-sidebar">
+            <div class="cart-header">
+                <div class="cart-total">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span>total item ({{ totalcartitems }})</span>
+                </div>
+                <button class="cart-close"><i class="icofont-close"></i></button>
+            </div>
+            <ul class="cart-list">
+                {% for product_id, item in cart_data.items %}
+                <li class="cart-item">
+                    <div class="cart-media">
+                        <a href="#"><img src="{% static '{{ item.image }}' %}" alt="product"></a>
+                        <button class="cart-delete"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                    <div class="cart-info-group">
+                        <div class="cart-info">
+                            <h6><a href="product-single.html">{{ item.title|truncatechars:50 }}</a></h6>
+                            <p>Unit Price - ₹{{ item.price.strip }}</p>
+                        </div>
+                        <div class="cart-action-group">
+                            <div class="product-action">
+                                <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                <input class="action-input" title="Quantity Number" type="text" name="quantity" value={{ item.qty }}>
+                                <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                            </div>
+                            <h6>₹{% widthratio item.price 1 item.qty  %}</h6>
+                        </div>
+                    </div>
+                </li> 
+                {% endfor %}
+            </ul>
+            <div class="cart-footer">
+                <button class="coupon-btn">Do you have a coupon code?</button>
+                <form class="coupon-form">
+                    <input type="text" placeholder="Enter your coupon code">
+                    <button type="submit"><span>apply</span></button>
+                </form>
+                <a class="cart-checkout-btn" href="checkout.html">
+                    <span class="checkout-label">Proceed to Checkout</span>
+                    <span class="checkout-price">₹{{ cart_total_amount }}</span>
+                </a>
+            </div>
+        </aside>-->
+        <!--=====================================
+                    CART SIDEBAR PART END
+        =======================================-->
+
+
+        <!--=====================================
+                  NAV SIDEBAR PART START
+        =======================================-->
+        <aside class="nav-sidebar">
+            <div class="nav-header">
+                <a href="#"><img src="{% static 'images/logo.png' %}" alt="logo"></a>
+                <button class="nav-close"><i class="icofont-close"></i></button>
+            </div>
+            {% if not request.user.is_authenticated %}
+            <div class="nav-content">
+                <div class="nav-btn">
+                    <a href="login.html" class="btn btn-inline">
+                        <i class="fa fa-unlock-alt"></i>
+                        <span>Join Here</span>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
+                
+                <div class="nav-profile">
+    {% if request.user.is_authenticated %}
+        {% if profile_picture %}
+            <a class="nav-user" href="{% url 'core:dashboard' %}">
+                <img src="{{ profile_picture }}" alt="user">
+            </a>
+        {% else %}
+            <!-- If user is authenticated but doesn't have a profile image, display a default image -->
+            <a class="nav-user" href="{% url 'core:dashboard' %}">
+                <img src="{% static 'images/user.png' %}" alt="user">
+            </a>
+        {% endif %}
+        <h4 class="nav-name"><a href="{% url 'core:dashboard' %}">{{ request.user.username }}</a></h4>
+    {% else %}
+        <!-- If user is not authenticated, display a default image and "Join" link -->
+        <a class="nav-user" href="{% url 'userauths:login' %}">
+            <img src="{% static 'images/user.png' %}" alt="user">
+        </a>
+        <h4 class="nav-name"><a href="{% url 'userauths:login' %}">Join</a></h4>
+    {% endif %}
+</div>
+
+                
+                <ul class="nav-list">
+                    <li>
+                        <a class="nav-link" href="{% url "core:index" %}"><i class="icofont-home"></i>Home</a>
+                        <ul class="dropdown-list">
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url "core:product" %}"><i class="icofont-food-cart"></i>shop</a>
+                        <ul class="dropdown-list">
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url "core:dashboard" %}"><i class="icofont-bag-alt"></i>my account</a>
+                        <ul class="dropdown-list">
+                           
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-link dropdown-link" href="#"><i class="icofont-lock"></i>authentication</a>
+                        <ul class="dropdown-list">
+                            
+                            
+                            {% if requst.user.is_authenticated %}
+                            <lia><a href = {% url 'userauths:login' %}> logout </a></li>
+                            <li><a href="reset-password.html">reset password</a></li>
+                            <li><a href="change-password.html">change password</a></li>
+                            {% else %}
+                            <li><a href= {% url 'userauths:login' %}>login</a></li>
+                            <li><a href={% url 'userauths:sign-up' %}>register</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+       
+                    <li><a class="nav-link" href="{% url "core:contact" %}"><i class="icofont-contacts"></i>contact us</a></li>
+                    {% if requst.user.is_authenticated %}
+                    <li><a class="nav-link" href="{% url "userauths:sign-out" %}"><i class="icofont-logout"></i>logout</a></li>
+                    {% endif %}
+                </ul>
+                <div class="nav-info-group">
+                    <div class="nav-info">
+                        <i class="icofont-ui-touch-phone"></i>
+                        <p>
+                            <small>call us</small>
+                            <span>+91 8511137647</span>
+                        </p>
+                    </div>
+                    <div class="nav-info">
+                        <i class="icofont-ui-email"></i>
+                        <p>
+                            <small>email us</small>
+                            <span>visw_electronics@yahoo.com</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="nav-footer">
+                    <p>All Rights Reserved by <a href="#">Vishw</a></p>
+                </div>
+            </div>
+        </aside>
+        <!--=====================================
+                  NAV SIDEBAR PART END
+        =======================================-->
+
+
+
+        <!--=====================================
+                    PRODUCT VIEW START
+        =======================================-->
+        {% for p in products %}
+        <div class="modal fade" id="product-view-{{ p.id }}">
+            <div class="modal-dialog"> 
+                <div class="modal-content">
+                    <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
+                    <div class="product-view">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="view-gallery">
+                                    <div class="view-label-group">
+                                        <label class="view-label new">new</label>
+                                        <label class="view-label off">{{ p.get_percentage|floatformat:0 }}%</label>
+                                    </div>
+                                    <ul class="preview-slider slider-arrow large-square"> 
+                                        <li><img src="{{ p.image.url }}" alt="product"></li>
+                                        {% for image in p.p_images.all %}
+                                        <li><img src="{{ image.images.url }}" alt="product"></li>
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                    <ul class="thumb-slider small-square">
+                                        <li><img src="{{ p.image.url }}" alt="product"></li>
+                                        {% for image in p.p_images.all %}
+                                        <li><img src="{{ image.images.url }}" alt="product"></li>
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="view-details">
+                                    <h3 class="view-name">
+                                        {{ p.title|truncatechars:60 }}
+                                    </h3>
+                                    <div class="view-meta">
+                                        <p>SKU:<span class='sku'>{{ p.sku }}</span></p>
+                                        <p>BRAND:<a href="{% url 'core:brand-product-list' p.brand.bid %}">{{ p.brand }}</a></p>
+                                    </div>
+                                    <div class="view-rating">
+                                        {% if p.get_average_rating %}
+                                            {% for i in "12345"|make_list %}
+                                            {% if i|add:0 <= p.get_average_rating|default_if_none:0 %}
+                                                    <i class="active icofont-star"></i>
+                                                {% else %}
+                                                    <i class="icofont-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <a href="#">({{ p.reviews.count }} review{{ p.reviews.count|pluralize }})</a>
+                                        {% else %}
+                                            No reviews yet
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="view-price">
+                                        
+                                            <del><span class="old-product-price-{{ p.id }}">₹{{ p.old_price }}</span></del>
+                                            <span>₹</span> <span class="current-product-price-{{ p.id }}"> {{ p.price }}</span>
+                                        
+                                    </h3>
+                                    <p class="view-desc">{{ p.description|truncatechars:170|safe }}</p>
+                                    <div class="view-list-group">
+                                        <label class="view-list-title">tags:</label>
+                                        <ul class="view-tag-list">
+                                            {% for t in p.tags.all %}
+                                            <li><a href="{% url 'core:tags' t.slug %}">{{ t.name }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="view-list-group">
+                                        <label class="view-list-title">Share:</label>
+                                        <ul class="view-share-list">
+                                            <!-- Share Button for Twitter -->
+                                            <li>
+                                                <a href="#" onclick="shareOnTwitter('{{ p.title }}', '{{ request.build_absolute_uri }}')" title="Share on Twitter">
+                                                    <i class="icofont-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <!-- Share Button for Facebook -->
+                                            <li>
+                                                <a href="#" onclick="shareOnFacebook('{{ p.title }}', '{{ request.build_absolute_uri }}')" title="Share on Facebook">
+                                                    <i class="icofont-facebook"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" onclick="shareOnWhatsApp('{{ p.title }}', '{{ request.build_absolute_uri }}')" title="Share on WhatsApp">
+                                                    <i class="bi bi-whatsapp"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <script>
+                                        // Function to share on Twitter
+                                        function shareOnTwitter(title, url) {
+                                            var tweet = encodeURIComponent("I ♥ this product on Vishw! " + title + " " + url + " #buyonVishw via @vishwelectronics");
+                                            window.open("https://twitter.com/intent/tweet?text=" + tweet);
+                                        }
+                                    
+                                        // Function to share on Facebook
+                                        function shareOnFacebook(title, url) {
+                                            var facebookShare = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+                                            window.open(facebookShare);
+                                    
+                                        }
+                                       
+                                            // Function to share on WhatsApp
+                                            function shareOnWhatsApp(title, url) {
+                                                var message = "I ♥ this product on Vishw! " + title + " " + url + " #buyonVishw via @vishwelectronics";
+                                                var whatsappLink = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
+                                                window.open(whatsappLink);
+                                            }
+                                       
+                                        
+                                    </script>
+                                    <div class="view-add-group">
+                                        <button class="product-add add-to-cart-btn-v5" title="Add to Cart" data-index="{{ p.id }}" id="add-to-cart-btn">
+                                            <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                            <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                            <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                            <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                            <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.title }}">
+                                            <input type="hidden" class="product-stock-{{ p.id }}" value="{{ p.quantity }}">
+                                            <i class="fas fa-shopping-basket"></i>
+                                            <span>add to cart</span>
+                                        </button>
+                                        <!--<div class="product-action">
+                                            <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                            <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                        </div>-->
+                                    </div>
+                                    <div class="view-action-group">
+                                        
+                                        <button class="view-wish wish add-to-wishlist" data-product-item="{{p.id}}" title="Add Your Wishlist">
+                                            <i class="icofont-heart"></i>
+                                            <span>add to wish</span>
+                                        </button>
+                                        <!--
+                                        <a class="view-compare" href="compare.html" title="Compare This Item">
+                                            <i class="fas fa-random"></i>
+                                            <span>Compare This</span>
+                                        </a>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </div>
+        {% endfor %}
+
+      
+        {% for p in products %}
+        <div class="modal fade" id="product-view-v2-{{ p.id }}">
+            <div class="modal-dialog"> 
+                <div class="modal-content">
+                    <button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
+                    <div class="product-view">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="view-gallery">
+                                    <div class="view-label-group">
+                                        <label class="view-label new">new</label>
+                                        <label class="view-label off">{{ p.get_percentage|floatformat:0 }}%</label>
+                                    </div>
+                                    <ul class="preview-slider slider-arrow large-square"> 
+                                        <li><img src="{{ p.image.url }}" alt="product"></li>
+                                        {% for image in p.p_images.all %}
+                                        <li><img src="{{ image.images.url }}" alt="product"></li>
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                    <ul class="thumb-slider small-square">
+                                        <li><img src="{{ p.image.url }}" alt="product"></li>
+                                        {% for image in p.p_images.all %}
+                                        <li><img src="{{ image.images.url }}" alt="product"></li>
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="view-details">
+                                    <h3 class="view-name">
+                                        {{ p.title|truncatechars:60 }}
+                                    </h3>
+                                    <div class="view-meta">
+                                        <p>SKU:<span class='sku'>{{ p.sku }}</span></p>
+                                        <p>BRAND:<a href="#">{{ p.brand }}</a></p>
+                                    </div>
+                                    <div class="view-rating">
+                                        {% if p.get_average_rating %}
+                                            {% for i in "12345"|make_list %}
+                                            {% if i|add:0 <= p.get_average_rating|default_if_none:0 %}
+                                                    <i class="active icofont-star"></i>
+                                                {% else %}
+                                                    <i class="icofont-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <a href="#">({{ p.reviews.count }} review{{ p.reviews.count|pluralize }})</a>
+                                        {% else %}
+                                            No reviews yet
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="view-price">
+                                        
+                                            <del><span class="old-product-price-{{ p.id }}">₹{{ p.old_price }}</span></del>
+                                            <span>₹</span> <span class="current-product-price-{{ p.id }}"> {{ p.price }}</span>
+                                        
+                                    </h3>
+                                    <p class="view-desc">{{ p.description|truncatechars:170|safe }}</p>
+                                    <div class="view-list-group">
+                                        <label class="view-list-title">tags:</label>
+                                        <ul class="view-tag-list">
+                                            {% for t in p.tags.all %}
+                                            <li><a href="{% url 'core:tags' t.slug %}">{{ t.name }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="view-list-group">
+                                        <label class="view-list-title">Share:</label>
+                                        <ul class="view-share-list">
+                                            <!-- Share Button for Twitter -->
+                                            <li>
+                                                <a href="#" onclick="shareOnTwitter('{{ p.title }}', '{{ request.build_absolute_uri }}')" title="Share on Twitter">
+                                                    <i class="icofont-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <!-- Share Button for Facebook -->
+                                            <li>
+                                                <a href="#" onclick="shareOnFacebook('{{ p.title }}', '{{ request.build_absolute_uri }}')" title="Share on Facebook">
+                                                    <i class="icofont-facebook"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" onclick="shareOnWhatsApp('{{ p.title }}', '{{ request.build_absolute_uri }}')" title="Share on WhatsApp">
+                                                    <i class="bi bi-whatsapp"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <script>
+                                        // Function to share on Twitter
+                                        function shareOnTwitter(title, url) {
+                                            var tweet = encodeURIComponent("I ♥ this product on Vishw! " + title + " " + url + " #buyonVishw via @vishwelectronics");
+                                            window.open("https://twitter.com/intent/tweet?text=" + tweet);
+                                        }
+                                    
+                                        // Function to share on Facebook
+                                        function shareOnFacebook(title, url) {
+                                            var facebookShare = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+                                            window.open(facebookShare);
+                                    
+                                        }
+                                       
+                                            // Function to share on WhatsApp
+                                            function shareOnWhatsApp(title, url) {
+                                                var message = "I ♥ this product on Vishw! " + title + " " + url + " #buyonVishw via @vishwelectronics";
+                                                var whatsappLink = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
+                                                window.open(whatsappLink);
+                                            }
+                                       
+                                        
+                                    </script>
+                                    <div class="view-add-group">
+                                        <button class="product-add add-to-cart-btn-v5" title="Add to Cart" data-index="{{ p.id }}" id="add-to-cart-btn">
+                                            <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                            <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                            <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                            <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                            <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.title }}">
+                                            <input type="hidden" class="product-stock-{{ p.id }}" value="{{ p.quantity }}">
+                                            <i class="fas fa-shopping-basket"></i>
+                                            <span>add to cart</span>
+                                        </button>
+                                        <!--<div class="product-action">
+                                            <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                            <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                        </div>-->
+                                    </div>
+                                    <div class="view-action-group">
+                                        
+                                        <button class="view-wish wish add-to-wishlist" data-product-item="{{p.id}}" title="Add Your Wishlist">
+                                            <i class="icofont-heart"></i>
+                                            <span>add to wish</span>
+                                        </button>
+                                        <!--
+                                        <a class="view-compare" href="compare.html" title="Compare This Item">
+                                            <i class="fas fa-random"></i>
+                                            <span>Compare This</span>
+                                        </a>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </div>
+        {% endfor %}
+
+          
+        <!--=====================================
+                    PRODUCT VIEW END
+        =======================================-->
+
+
+ <!--=====================================
+                    MOBILE-MENU PART START
+        =======================================-->
+        <div class="mobile-menu">
+            <a href="{% url "core:index" %}" title="Home Page">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <button class="cate-btn" title="Category List">
+                <i class="fas fa-list"></i>
+                <span>category</span>
+            </button>
+            <a href="{% url "core:cart" %}" class="cart-btn" title="Cartlist">
+                <i class="fas fa-shopping-basket"></i>
+                <span>cartlist</span>
+                <sup class="cart-items-count">{{ request.session.cart_data_obj|length }}</sup>
+            </a>
+            <a href="{% url "core:wishlist" %}" title="Wishlist">
+                <i class="fas fa-heart"></i>
+                <span>wishlist</span>
+                <sup id="wishlist-count1">{{ wishlist.count }}</sup>
+            </a>
+          
+        </div>
+        <!--=====================================
+                    MOBILE-MENU PART END
+        =======================================-->
+
+        {% block content %}
+        {% endblock content %}
+       
+        <!--=====================================
+                    INTRO PART START
+        =======================================-->
+        <section class="intro-part">
+            <div class="container">
+                <div class="row intro-content">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="intro-wrap">
+                            <div class="intro-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="intro-content">
+                                <h5>free home delivery</h5>
+                                <p>
+                                    Enjoy the convenience of free home delivery on all orders placed through our website.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="intro-wrap">
+                            <div class="intro-icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <div class="intro-content">
+                                <h5>instant return policy</h5>
+                                <p>Experience hassle-free shopping with our instant return policy, ensuring swift and convenient returns for your peace of mind.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="intro-wrap">
+                            <div class="intro-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <div class="intro-content">
+                                <h5>quick support system</h5>
+                                <p>Access our lightning-fast support system for quick assistance and resolution of any queries or concerns you may have.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="intro-wrap">
+                            <div class="intro-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="intro-content">
+                                <h5>secure payment way</h5>
+                                <p>Shop with confidence knowing that we offer a secure payment gateway, ensuring the safety and protection of your financial transactions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                    INTRO PART END
+        =======================================-->
+        <!--=====================================
+                     FOOTER PART START
+        =======================================-->
+        <footer class="footer-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="footer-widget">
+                            <a class="footer-logo" href="#">
+                                <img src="{% static 'images/logo.png' %}" alt="logo">
+                            </a>
+                            <p class="footer-desc">Largest Electronics store in Vastral</p>
+                            <ul class="footer-social">
+                                <li><a class="icofont-facebook" href="https://www.facebook.com/vishwelectronicsvastral"></a></li>
+                                <!--<li><a class="icofont-twitter" href="#"></a></li>-->
+                                <!--<li><a class="icofont-linkedin" href="#"></a></li>-->
+                                <li><a class="icofont-instagram" href="https://www.instagram.com/vishwelectronics/"></a></li>
+                                <!--<li><a class="icofont-pinterest" href="#"></a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="footer-widget" contact style="margin-left: 100px; width: 300px">
+                            <h3 class="footer-title">Contact Us</h3>
+                            <ul class="footer-contact">
+                                <li>
+                                    <i class="icofont-ui-email"></i>
+                                    <p>
+                                        <span>vishw_electronics@yahoo.com</span>
+                                    </p>
+                                </li>
+                                <li>
+                                    <i class="icofont-ui-touch-phone"></i>
+                                    <p>
+                                        <span>+91 8511137647</span>
+                                    </p>
+                                </li>
+                                <li>
+                                    <i class="icofont-location-pin"></i>
+                                    <p>10, 11 Swaminarayan Park-2 Nr. CCR(cafe), Narayan Chawk, Opp Shreeji Milk Palace, Vastral, Ahmedabad, Gujarat 382418</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-100 col-xl-3">
+                        <div class="footer-widget" style="margin-left: 200px; width: 300px;"> <!-- Adjust margin as needed -->
+                            <h3 class="footer-title">Quick Links</h3>
+                            <div class="footer-links">
+                                <ul>
+                                    <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
+                                    <li><a href="{% url 'core:Orders' %}">Order History</a></li>
+                                    <li><a href="{% url 'core:Orders' %}">Order Tracking</a></li>
+                                    
+                                </ul>
+                                <ul>
+                                    <li><a href="{% url 'core:contact' %}">Contact</a></li>
+                                    <li><a href="{% url 'core:privacy-policy' %}">Privacy Policy</a></li>
+                                    <li><a href="{% url 'core:terms-conditions' %}">Terms and Condition</a></li>
+                                    
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="footer-bottom">
+                            <p class="footer-copytext">© All Copyrights Reserved by <a target="_blank" href="#">Vishw Electronics</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        
+        <!--=====================================
+                      FOOTER PART END
+        =======================================-->
+        
+
+        <!--=====================================
+                    JS LINK PART START
+        =======================================-->
+        <!-- VENDOR -->
+        <script src="{% static 'vendor/bootstrap/jquery-1.12.4.min.js' %}"></script>
+        <script src="{% static 'vendor/bootstrap/popper.min.js' %}"></script>
+        <script src="{% static 'vendor/bootstrap/bootstrap.min.js' %}"></script>
+        <script src="{% static 'vendor/countdown/countdown.min.js' %}"></script>
+        <script src="{% static 'vendor/niceselect/nice-select.min.js' %}"></script>
+        <script src="{% static 'vendor/slickslider/slick.min.js' %}"></script>
+        <script src="{% static 'vendor/venobox/venobox.min.js' %}"></script>
+        <!-- Add this in the head section of your HTML -->
+        
+
+
+        <!-- CUSTOM -->
+        
+        <script src="{% static 'js/nice-select.js' %}"></script>
+        <script src="{% static 'js/countdown.js' %}"></script>
+        <script src="{% static 'js/accordion.js' %}"></script>
+        <script src="{% static 'js/venobox.js' %}"></script>
+        <script src="{% static 'js/slick.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/function.js' %}"></script> 
+        
+
+        
+        
+        <!--=====================================
+                    JS LINK PART END
+        =======================================-->
+    </body>
+</html>

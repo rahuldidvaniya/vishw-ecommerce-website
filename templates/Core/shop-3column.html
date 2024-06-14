@@ -1,0 +1,396 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+        <!--
+        <section class="inner-section single-banner" style="background: url(images/single-banner.jpg) no-repeat center;">
+            <div class="container">
+                <h2>Shop</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:index' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                </ol>
+            </div>
+        </section>-->
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+     
+        <!--=====================================
+                    SHOP PART START
+        =======================================-->
+        <section class="inner-section shop-part" style="margin-top: 30px;">
+            <div class="container">
+                <div class="row content-reverse">
+                    <div class="col-lg-3">
+                        <div class="shop-widget-promo">
+                            <a href="{% url "core:category-product-list" 'catccagegffdb' %}"><img src="{% static 'images/promo/shop/vishwBanner.jpg' %}" alt="promo"></a>
+                        </div>
+                        <div class="shop-widget">
+                            <button class="shop-widget-btn-v2 shop-widget-btn">
+                                <i class="far fa-trash-alt"></i>
+                                <span>clear filters</span>
+                            </button>
+                        </div>
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Price</h6>
+                            <form method="get">
+                                <div class="shop-widget-group">
+                                    <input class="minPrice" type="text" placeholder="Min price" name="min_price" value="{{ request.GET.min_price }}">
+                                    <input class="maxPrice" type="text" placeholder="Max price" name="max_price" value="{{ request.GET.max_price }}">
+                                </div>
+                                <button class="shop-widget-btn">
+                                    <i class="fas fa-search"></i>
+                                    <span>apply filter</span>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Rating</h6>
+                            <form>
+                                <ul class="shop-widget-list rating-checkbox-list">
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="feat1" value="5">
+                                            <label for="feat1">
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                            </label>
+                                        </div>
+                                        
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="feat2" value="4">
+                                            <label for="feat2">
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star"></i>
+                                            </label>
+                                        </div>
+                                       
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="feat3" value="3">
+                                            <label for="feat3">
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </label>
+                                        </div>
+                                      
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="feat4" value="2">
+                                            <label for="feat4">
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </label>
+                                        </div>
+                                       
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="feat5" value="1">
+                                            <label for="feat5">
+                                                <i class="fas fa-star active"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </label>
+                                        </div>
+                                        
+                                    </li>
+                                </ul>
+                                <!--<button class="shop-widget-btn">
+                                    <i class="far fa-trash-alt"></i>
+                                    <span>clear filter</span>
+                                </button>-->
+                            </form>
+                        </div>
+                        <!--<div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Tag</h6>
+                            <form>
+                                <ul class="shop-widget-list">
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="tag1">
+                                            <label for="tag1">new items</label>
+                                        </div>
+                                        <span class="shop-widget-number">(13)</span>
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="tag2">
+                                            <label for="tag2">sale items</label>
+                                        </div>
+                                        <span class="shop-widget-number">(28)</span>
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="tag3">
+                                            <label for="tag3">rating items</label>
+                                        </div>
+                                        <span class="shop-widget-number">(35)</span>
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="tag4">
+                                            <label for="tag4">feature items</label>
+                                        </div>
+                                        <span class="shop-widget-number">(47)</span>
+                                    </li>
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <input type="checkbox" id="tag5">
+                                            <label for="tag5">discount items</label>
+                                        </div>
+                                        <span class="shop-widget-number">(59)</span>
+                                    </li>
+                                </ul>
+                                <button class="shop-widget-btn">
+                                    <i class="far fa-trash-alt"></i>
+                                    <span>clear filter</span>
+                                </button>
+                            </form>
+                        </div>-->
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Brand</h6>
+                            <form>
+                                <!--<input class="shop-widget-search" type="text" placeholder="Search...">-->
+                                <ul class="shop-widget-list shop-widget-scroll">
+                                    {% for b in brands %}
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <!-- Include the brand ID as the value for the checkbox -->
+                                            <input type="checkbox" class="filter-brand-checkbox" id="brand{{ b.id }}" value="{{ b.id }}">
+                                            <label for="brand{{ b.id }}">{{ b.title }}</label>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <!--<button class="shop-widget-btn">
+                                    <i class="far fa-trash-alt"></i>
+                                    <span>clear filter</span>
+                                </button>-->
+                            </form>
+                        </div>
+                        
+                        <div class="shop-widget">
+                            <h6 class="shop-widget-title">Filter by Category</h6>
+                            <form id="category-filter-form">
+                                <!--<input class="shop-widget-search" type="text" placeholder="Search..." name="Category">-->
+                                <ul class="shop-widget-list shop-widget-scroll">
+                                    {% for c in categories %}
+                                    <li>
+                                        <div class="shop-widget-content">
+                                            <!-- Set the value attribute of the checkbox to the category ID -->
+                                            <input class="filter-checkbox" type="checkbox" data-filter="category" id="categoryCheckbox{{ c.id }}" name="categoryCheckbox" value="{{ c.id }}" {% if c.id|stringformat:"s" in selected_category_ids %}checked{% endif %}>
+                                            <label for="categoryCheckbox{{ c.id }}">{{ c.title }}</label>
+                                        </div>
+                                        <span class="shop-widget-number">({{ c.category.count }})</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <!--<button type="submit" class="shop-widget-btn">
+                                    <i class="far fa-trash-alt"></i>
+                                    <span>Clear filter</span>
+                                </button>-->
+                            </form>
+                        </div>
+                        <script>
+                            // Run this function when the page loads
+                            window.onload = function() {
+                                // Get all checkboxes
+                                var checkboxes = document.querySelectorAll('input[type=checkbox]');
+                        
+                                for (var i = 0; i < checkboxes.length; i++) {
+                                    var checkbox = checkboxes[i];
+                        
+                                    // Set the checkbox state based on local storage
+                                    checkbox.checked = localStorage.getItem(checkbox.id) === 'true';
+                        
+                                    // Add an event listener to update local storage whenever a checkbox state changes
+                                    checkbox.addEventListener('change', function(e) {
+                                        localStorage.setItem(e.target.id, e.target.checked);
+                                    });
+                                }
+                            };
+                        </script>
+                        
+                        
+                    </div>
+                    <div class="col-lg-9">
+                        <!--<div class="row">
+                            <div class="col-lg-12">
+                                <div class="top-filter">
+                                    <div class="filter-show">
+                                        <label class="filter-label">Show :</label>
+                                        <select class="form-select filter-select">
+                                            <option value="1">12</option>
+                                            <option value="2">24</option>
+                                            <option value="3">36</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-short">
+                                        <label class="filter-label">Short by :</label>
+                                        <select class="form-select filter-select">
+                                            <option selected>default</option>
+                                            <option value="3">trending</option>
+                                            <option value="1">featured</option>
+                                            <option value="2">recommend</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-action">
+                                        <a href="shop-3column.html" class="active" title="Three Column"><i class="fas fa-th"></i></a>
+                                        <a href="shop-2column.html" title="Two Column"><i class="fas fa-th-large"></i></a>
+                                        <a href="shop-1column.html" title="One Column"><i class="fas fa-th-list"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3" id="filtered-products">
+                            {% for p in products %}
+                            <div class="col">
+                                <div class="product-card" data-product-id="{{ p.id }}">
+                                    <div class="product-media">
+                                        <div class="product-label">
+                                            {% if p.sale %}
+                                             <label class="label-text sale">sale</label>
+                                            {% endif %}
+                                           <label class="label-text off">{{ p.get_percentage|floatformat:0 }}%</label>
+                                            <!--<label class="label-text new">new</label>-->
+                                        </div>
+                                        <button class="product-wish wish add-to-wishlist" data-product-item="{{p.id}}">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                        <a class="product-image" href="{% url 'core:product-detail' p.pid %}">
+                                            <img src="{{ p.image.url }}" alt="product">
+                                        </a>
+                                        <div class="product-widget">
+                                            <!--<a title="Product Compare" href="compare.html" class="fas fa-random"></a>-->
+                                            <a title="Product Video" href="https://youtu.be/9xzcVxSBbG8" class="venobox fas fa-play" data-autoplay="true" data-vbtype="video"></a>
+                                            <a title="Product View" href="#" class="fas fa-eye quick-view-button" data-bs-toggle="modal" data-bs-target="#product-view-{{ p.id }}" data-product-id="{{ p.pid }}"></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-content">
+                                        <div class="product-rating">
+                                            {% if p.average_rating %}
+                                                {% for star_number in "12345"|make_list %}
+                                                    {% if star_number|add:0 <= p.average_rating|default_if_none:0 %}
+                                                        <i class="active icofont-star"></i>
+                                                    {% else %}
+                                                        <i class="icofont-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <a href="{% url 'core:product-detail' p.pid %}">({{ p.reviews.count }})</a>
+                                            {% else %}
+                                                <!-- No reviews yet -->
+                                                <span>No reviews yet</span>
+                                            {% endif %}
+                                        </div>
+                                        <h6 class="product-name">
+                                            <a href = "{% url 'core:product-detail' p.pid %}">{{ p.title|truncatechars:30 }}</a>
+                                        </h6>
+                                        <h6 class="product-price">
+                                            <del><span class="old-product-price-{{ p.id }}">₹{{ p.old_price }}</span></del>
+                                            <span>₹</span><span class="current-product-price-{{ p.id }}">{{ p.price }}<small></small></span>
+                                        </h6>
+                                        <button class="product-add add-to-cart-btn" title="Add to Cart" data-index="{{ p.id }}" id="add-to-cart-btn">
+                                            <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                            <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                            <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                            <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                            <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.title }}">
+                                            <input type="hidden" class="product-stock-{{ p.id }}" value="{{ p.quantity }}">
+                                            <i class="fas fa-shopping-basket"></i>
+        
+        
+                                            <span>add</span>
+                                        </button>
+                                        <!--<div class="product-action">
+                                            <button class="action-minus" title="Quantity Minus"><i class="icofont-minus"></i></button>
+                                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                                            <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="bottom-paginate">
+                                    <p class="page-info">Showing {{ products.start_index }}-{{ products.end_index }} of {{ products.paginator.count }} Results</p>
+                                    <ul class="pagination">
+                                        {% if products.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ pagination_url }}&page={{ products.previous_page_number }}">
+                                                <i class="fas fa-angle-left"></i> Previous
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% for page in products.paginator.page_range %}
+                                        {% with products.number|add:"-3" as lower_limit %}
+                                        {% with products.number|add:"3" as upper_limit %}
+                                        {% if products.number == page %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="{{ pagination_url }}&page={{ page }}">{{ page }}</a>
+                                        </li>
+                                        {% elif page > lower_limit and page < upper_limit %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ pagination_url }}&page={{ page }}">{{ page }}</a>
+                                        </li>
+                                        {% endif %}
+                                        {% endwith %}
+                                        {% endwith %}
+                                        {% endfor %}
+                                        {% if products.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ pagination_url }}&page={{ products.next_page_number }}">
+                                                Next <i class="fas fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                    SHOP PART END
+        =======================================-->
+        
+
+
+
+
+        {% endblock content %}

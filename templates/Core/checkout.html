@@ -1,0 +1,520 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+       
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    CHECKOUT PART START
+        =======================================-->
+        <section class="inner-section checkout-part" style="margin-top: 30px;">
+            <div class="container">
+                <div class="row">
+                    {% if not request.user.is_authenticated %}
+                    <div class="col-lg-12">
+                        <div class="alert-info">
+                            <p>Returning customer? <a href="login.html">Click here to login</a></p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Your order</h4>
+                            </div>
+                            <div class="account-content">
+                                <div class="table-scroll">
+                                    <table class="table-list">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Serial</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Price</th>
+                                                <!--<th scope="col">brand</th>-->
+                                                <th scope="col">quantity</th>
+                                                <th scope="col">action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for product_id, item in cart_data.items %}
+                                            <tr>
+                                                <td class="table-serial"><h6>{{ forloop.counter }}</h6></td>
+                                                <td class="table-image"><img src="{{ item.image }}" alt="product"></td>
+                                                <td class="table-name"><a href={% url "core:product-detail" item.pid %}><h6>{{ item.title|truncatechars:20 }}</h6></a></td>
+                                                <td class="table-price"><h6>₹{{ item.price }}</h6></td>
+                                                <!--<td class="table-brand"><h6>Fresh Company</h6></td>-->
+                                                <td class="table-quantity"><h6>{{ item.qty }}</h6></td>
+                                                <td class="table-action">
+                                                    <a title="Product View" href="#" class="fas fa-eye quick-view-button" data-bs-toggle="modal" data-bs-target="#product-view-{{ product_id }}" data-product-id="{{ item.pid }}"></a>
+                                                   
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="chekout-coupon">
+                                    <p class="coupon-btn">You will save ₹{{ discount }} on this order</p>
+                                    <!--<form class="coupon-form">
+                                        <input type="text" placeholder="Enter your coupon code">
+                                        <button type="submit"><span>apply</span></button>
+                                    </form>-->
+                                </div>
+                                <div class="checkout-charge">
+                                    <ul>
+                                        <li>
+                                            <span>Sub total</span>
+                                            <span>₹{{ total_cart_amount_old_price }}</span>
+                                        </li>
+                                        <li>
+                                            <span>Delivery Fee</span>
+                                            {% if delivery_charges == 0 %}
+                                                <span><del>₹100</del> Free</span>
+                                            {% else %}
+                                                <span>₹{{ delivery_charges }}</span>
+                                            {% endif %}
+                                        </li>
+                                        
+                                        
+                                        <li>
+                                            <span>discount</span>
+                                            <span>₹{{ discount }}</span>
+                                        </li>
+                                        <hr>
+                                        <li>
+                                            <span>Total<small>(Incl. VAT)</small></span>
+                                            <span>₹{{ cart_total_amount }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Delivery Schedule</h4>
+                            </div>
+                            <div class="account-content">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="profile-card schedule active">
+                                            <h6>express</h6>
+                                            <p>90 min express delivery</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="profile-card schedule">
+                                            <h6>8am-10pm</h6>
+                                            <p>8.00 AM - 10.00 PM</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="profile-card schedule">
+                                            <h6>Next day</h6>
+                                            <p>Next day or Tomorrow</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                  
+                    <!--<div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>enter shipping information</h4>
+                              
+                            </div>
+                            <div class="account-content">
+                                <form method = "post">
+                                    {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="FirstName">First Name*</label>
+                                            <input type="text" name="FirstName" value={{ address.first_name }} class="form-control" placeholder="First Name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="MiddleName">Middle Name</label>
+                                            <input type="text" name="MiddleName" class="form-control" placeholder="Middle Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="LastName">Last Name*</label>
+                                            <input type="text" name="LastName" value="{{ address.last_name }}" class="form-control" placeholder="Last Name" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="EmailId">Email Id*</label>
+                                            <input type="email" name="EmailId" value="{{ profile.email }}" class="form-control" placeholder="Email" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="mobile">Mobile Number*</label>
+                                            <input type="tel" id="mobile" class="form-control" value="{{ profile.phone }}" name="mobile" placeholder="Enter your 10-digit number" pattern="[0-9]{10}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="StreetAddress">Street Address*</label>
+                                            <input type="text" id="StreetAddress" class="form-control" value="{{ address.street_address }}" name="address" placeholder="Enter your street address" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="City">City*</label>
+                                            <input type="text" id="City" class="form-control" value="{{ address.city_district_town }}" name="City/District/Town" placeholder="Enter your city" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="State">State/Province*</label>
+                                            <input type="text" id="State" class="form-control" value="{{ address.state }}" name="State" placeholder="Enter your state/province" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label for="PostalCode">Postal Code*</label>
+                                            <input type="text" id="PostalCode" class="form-control" value="{{ address.pincode }}" name="Pincode" placeholder="Enter your postal code" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 alert fade show">
+                                        <div class="form-group">
+                                            <label>Payment Method*</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="PaymentMethod" id="cod" value="cod" required>
+                                                <label class="form-check-label" for="cod">
+                                                    Cash on Delivery
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="PaymentMethod" id="upi" value="upi">
+                                                <label class="form-check-label" for="upi">
+                                                    UPI
+                                                </label>
+                                            </div>
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            </div>
+
+                            
+                            
+                        </div>
+                    </div>-->
+                    
+                    {% if not request.user.userauths_addresses.all %}
+                    <div class="col-lg-12">
+                        <div class="alert-info">
+                            <p>Add shipping address to continue</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Delivery Address</h4>
+                                
+                                <button data-bs-toggle="modal" data-bs-target="#address-add">Add Address</button>
+                               
+                            </div>
+                            <div class="account-content">
+                                <div class="row">
+                                    {% for address in request.user.userauths_addresses.all %}
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="profile-card address {% if forloop.first %}active{% endif %}">
+                                            <!-- Radio button for selecting the address -->
+                                            <input type="radio" name="selected_address" id="address{{ address.id }}" value="{{ address.id }}" {% if forloop.first %}checked{% endif %} style="display: none;">
+                                            <label for="address{{ address.id }}">
+                                                <h3>{{ address.title|capfirst }}</h3>
+                                                <h6>{{ address.first_name }} {{ address.last_name }}</h6>
+                                                <p>
+                                                    {{ address.street_address }},
+                                                    {{ address.city_district_town }},
+                                                    {{ address.state }},
+                                                    {{ address.pincode }}
+                                                </p>
+                                                <ul class="user-action">
+                                                    <!--<li><button class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#address-edit"></button></li>-->
+                                                    <li><button class="trash1 icofont-ui-delete" title="Remove This" data-bs-dismiss="alert" data-id="{{ address.id }}"></button></li>
+                                                </ul>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if request.user.userauths_addresses.all %}
+                    <div class="col-lg-12">
+                        <div class="account-card">
+                            <div class="account-title">
+                                <h4>Payment Method</h4>
+                            </div>
+                            <div class="row">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="paymentOption" value="cash_on_delivery" id="cashOnDelivery" onclick="displayButton(this.id)">
+                                    <label class="form-check-label" for="cashOnDelivery">Cash On Delivery</label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="paymentOption" id="paypal" onclick="displayButton(this.id)">
+                                    <label class="form-check-label" for="paypal">PayPal</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-proced" style="text-align: center;">
+                        <div id="paypalButton" style="display: none;">
+                            {{ paypal_payment_button.render }}
+                        </div>
+                        <div id="codButton" style="display: none;">
+                            <button onclick="redirectToPaymentCompleted()" href="{% url 'core:payment-completed' %}" class="btn btn-inline">Buy Now</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <script>
+       function displayButton(id) {
+    if (id === 'paypal') {
+        document.getElementById('paypalButton').style.display = 'block';
+        document.getElementById('codButton').style.display = 'none';
+    } else if (id === 'cashOnDelivery') {
+        document.getElementById('paypalButton').style.display = 'none';
+        document.getElementById('codButton').style.display = 'block';
+    }
+}
+
+function redirectToPaymentCompleted() {
+    // Get the selected payment method
+    var paymentMethod = document.querySelector('input[name="paymentOption"]:checked').value;
+
+    // Redirect the user to the payment-completed page with the payment method as a URL parameter
+    window.location.href = "{% url 'core:payment-completed' %}?payment_method=" + paymentMethod;
+}
+
+
+
+                    </script>
+                    
+               
+                    
+                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+          
+    
+    
+        <div class="modal fade" id="contact-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form">
+                        <div class="form-title">
+                            <h3>add new contact</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">title</label>
+                            <select class="form-select">
+                                <option selected>choose title</option>
+                                <option value="primary">primary</option>
+                                <option value="secondary">secondary</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">number</label>
+                            <input class="form-control" type="text" placeholder="Enter your number">
+                        </div>
+                        <button class="form-btn" type="submit">save contact info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+
+        <div class="modal fade" id="address-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="address-form" value="1"> 
+                        <div class="form-title">
+                            <h3>Add New Address</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <select name="title" class="form-select">
+                                <option selected disabled>Choose Title</option>
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label"> first name</label>
+                            <input name="first_name" class="form-control" placeholder="Enter your first name"></input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> last name</label>
+                            <input name="last_name" class="form-control" placeholder="Enter your last name"></input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> Street Address</label>
+                            <textarea name="address" class="form-control" placeholder="Enter your street address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> City/District/Town </label>
+                            <input type="text" name="City/District/Town" class="form-control" placeholder="city/district/town">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> State </label>
+                            <input type="text" name="State" class="form-control" placeholder="State">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> Pincode </label>
+                            <input type="text" name="Pincode" class="form-control" placeholder="Pincode">
+                        </div>
+                            
+                        <button class="form-btn" type="submit">Save Address Info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+       
+        <div class="modal fade" id="payment-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form">
+                        <div class="form-title">
+                            <h3>add new payment</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">card number</label>
+                            <input class="form-control" type="text" placeholder="Enter your card number">
+                        </div>
+                        <button class="form-btn" type="submit">save card info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+     
+        <div class="modal fade" id="contact-edit">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form">
+                        <div class="form-title">
+                            <h3>edit contact info</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">title</label>
+                            <select class="form-select">
+                                <option value="primary" selected>primary</option>
+                                <option value="secondary">secondary</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">number</label>
+                            <input class="form-control" type="text" value="+8801838288389">
+                        </div>
+                        <button class="form-btn" type="submit">save contact info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+
+
+       
+        <div class="modal fade" id="address-add">
+            <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal-content">
+                    <button class="modal-close" data-bs-dismiss="modal"><i class="icofont-close"></i></button>
+                    <form class="modal-form" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="address-form" value="1"> 
+                        <div class="form-title">
+                            <h3>Add New Address</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <select name="title" class="form-select">
+                                <option selected disabled>Choose Title</option>
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label"> first name</label>
+                            <input name="first_name1" class="form-control" placeholder="Enter your first name"></input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> last name</label>
+                            <input name="last_name1" class="form-control" placeholder="Enter your last name"></input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> Street Address</label>
+                            <textarea name="address" class="form-control" placeholder="Enter your street address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> City/District/Town </label>
+                            <input type="text" name="City/District/Town" class="form-control" placeholder="city/district/town">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> State </label>
+                            <input type="text" name="State" class="form-control" placeholder="State">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"> Pincode </label>
+                            <input type="text" name="Pincode" class="form-control" placeholder="Pincode">
+                        </div>
+                            
+                        <button class="form-btn" type="submit">Save Address Info</button>
+                    </form>
+                </div> 
+            </div> 
+        </div>
+   
+
+
+   
+
+
+        {% endblock content %}
+
+
+
+
+
+

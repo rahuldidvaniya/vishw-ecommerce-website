@@ -1,0 +1,111 @@
+{% extends "partials/base.html" %}
+        {% load static %}
+        {% block content %}
+
+
+        <!--=====================================
+                    BANNER PART START
+        =======================================-->
+        <section class="inner-section single-banner" style="background: url(images/single-banner.jpg) no-repeat center;">
+            <div class="container">
+                <h2>contact us</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url "core:index" %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+                </ol>
+            </div>
+        </section>
+        <!--=====================================
+                    BANNER PART END
+        =======================================-->
+
+
+        <!--=====================================
+                    CONTACT PART START
+        =======================================-->
+        <section class="inner-section contact-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="contact-card">
+                            <i class="icofont-location-pin"></i>
+                            <h4>Store Location</h4>
+                            <p>10, 11 Swaminarayan Park-2 Nr. CCR(cafe), Narayan Chawk, Opp Shreeji Milk Palace, Vastral, Ahmedabad, Gujarat 382418</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="contact-card active">
+                            <i class="icofont-phone"></i>
+                            <h4>phone number</h4>
+                            <p>
+                                <a href="#">+91 8511137647 <span></span></a>
+                                <a href="#">+91 8511137639</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="contact-card">
+                            <i class="icofont-email"></i>
+                            <h4>Support mail</h4>
+                            <p>
+                                <a href="#">visw_electronics@yahoo.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="contact-map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.4393472644533!2d72.65831749452639!3d23.007635353997546!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e8644dac7cf0f%3A0x6fb45e6dd6822b24!2sVishw%20Electronics%20-%202!5e0!3m2!1sen!2sin!4v1708005563441!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="contact-form" action="/contact/" method="POST">
+                            {% csrf_token %}
+                            <h4>Drop Your Thoughts</h4>
+                            <div class="form-group">
+                                <div class="form-input-group">
+                                    <input class="form-control" name="name" type="text" placeholder="Your Name">
+                                    <i class="icofont-user-alt-3"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-input-group">
+                                    <input class="form-control" name="email" type="text" placeholder="Your Email">
+                                    <i class="icofont-email"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-input-group">
+                                    <input class="form-control" name="subject" type="text" placeholder="Your Subject">
+                                    <i class="icofont-book-mark"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-input-group">
+                                    <textarea class="form-control" name="message" placeholder="Your Message"></textarea>
+                                    <i class="icofont-paragraph"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="form-btn-group">
+                                <i class="fas fa-envelope"></i>
+                                <span>send message</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--=====================================
+                    CONTACT PART END
+        =======================================-->
+
+
+        
+  {% endblock %}
+
+
+
+
+
+
