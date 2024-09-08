@@ -1,4 +1,4 @@
-# Vishw - E-Commerce Website
+# Vishw - ECommerce Website
 
 This project is a fully-featured e-commerce website built with Django. It includes product listing, filtering, searching, a shopping cart, and checkout functionalities. The admin panel is customized using the **Jazzmin** theme for enhanced UI and UX.
 
