@@ -25,7 +25,7 @@ This project is a fully-featured e-commerce website built with Django. It includ
 
     ```bash
     git clone https://github.com/rahuldidvaniya/vishw-ecommerce-website.git
-    cd django-ecommerce
+    cd vishw-ecommerce-website
     ```
 
 2. **Create and activate a virtual environment:**
