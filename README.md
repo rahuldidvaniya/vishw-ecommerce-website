@@ -16,7 +16,7 @@ This project is a fully-featured e-commerce website built with Django. It includ
 
 - **Backend:** Django (Python)
 - **Frontend:** HTML, CSS, Bootstrap, JavaScript
-- **Database:** SQLite (default) or PostgreSQL (optional)
+- **Database:** SQLite (default) or PostgreSQL, MySQL
 - **Admin Panel:** Jazzmin
 
 ## Installation
@@ -24,7 +24,7 @@ This project is a fully-featured e-commerce website built with Django. It includ
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/your-username/django-ecommerce.git
+    git clone https://github.com/rahuldidvaniya/vishw-ecommerce-website.git
     cd django-ecommerce
     ```
 
