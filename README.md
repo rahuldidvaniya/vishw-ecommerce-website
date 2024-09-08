@@ -79,6 +79,4 @@ This project is a fully-featured e-commerce website built with Django. It includ
 ![alt text](<Screenshot 2024-03-25 163302.png>)
 ![alt text](<Screenshot 2024-03-25 151438.png>)
 ![alt text](<Screenshot 2024-03-25 125901.png>)
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
