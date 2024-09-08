@@ -72,11 +72,4 @@ This project is a fully-featured e-commerce website built with Django. It includ
 - **Jazzmin Theme:** The admin panel's appearance and functionality have been enhanced using Jazzmin, making it more user-friendly.
 - **Product Management:** Admin users can easily manage products, categories, and brands from the admin panel.
 
-## Screenshots
-![alt text](<Screenshot 2024-03-25 142255.png>)
-![alt text](<Screenshot 2024-03-25 145403.png>)
-![alt text](<Screenshot 2024-03-25 162203.png>)
-![alt text](<Screenshot 2024-03-25 163302.png>)
-![alt text](<Screenshot 2024-03-25 151438.png>)
-![alt text](<Screenshot 2024-03-25 125901.png>)
 
