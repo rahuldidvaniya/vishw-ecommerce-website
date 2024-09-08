@@ -1,0 +1,26 @@
+# Python
+*.py[cod]
+__pycache__/
+
+# Virtual Environments
+venv/
+.env/
+env/
+
+# Django
+db.sqlite3
+/staticfiles/
+/media/
+
+# Logs
+*.log
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Node.js
+node_modules/
+
+# Compiled assets
+/dist/
