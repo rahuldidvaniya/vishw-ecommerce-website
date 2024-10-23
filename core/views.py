@@ -45,33 +45,28 @@ import locale
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
-
-
-
+from django.db.models import Avg, Count
+from django.shortcuts import render
+from .models import Products, Category, Brand, ProductReview
 
 
 def index(request):
+    # Fetch products and related data
     products = Products.objects.all().order_by('-id')[:15]
-    category = Category.objects.annotate(n_products=Count('category'))
+    categories = Category.objects.annotate(product_count=Count('category'))
     featured_products = Products.objects.filter(featured=True)
-    brands = Brand.objects.annotate(num_products=Count('brand'))
+    brands = Brand.objects.annotate(product_count=Count('brand'))
     mobile_phones = Products.objects.filter(mobile_phone=True)[:8]
 
-
-
-    # Calculate average rating for each product
-    for product in products:
-        product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
-
-    for product in featured_products:
-        product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
-
-    for product in mobile_phones:
-        product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
+    # Calculate average ratings
+    product_sets = [products, featured_products, mobile_phones]
+    for product_set in product_sets:
+        for product in product_set:
+            product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
 
     context = {
         "products": products,
-        "category": category,
+        "categories": categories,
         "featured_products": featured_products,
         "brands": brands,
         "mobile_phones": mobile_phones
@@ -83,40 +78,39 @@ def index(request):
 
 
 def product_list(request):
-    # Fetch all products
+    # Fetch all products and brands
     all_products = Products.objects.all().order_by('-id')
     brands = Brand.objects.all()
 
-    # Get selected category, brand, and price range from request parameters
+    # Get filter parameters from request
     selected_category_ids = request.GET.getlist('category')
     selected_brand_ids = request.GET.getlist('brand')
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     selected_rating = request.GET.get('rating')
 
-    print("minimum price: ", min_price)
-    print("maximum price: ", max_price)
-
-    # Filter products based on selected category, brand, and price range
+    # Apply filters
     if selected_category_ids:
         all_products = all_products.filter(category__id__in=selected_category_ids)
     if selected_brand_ids:
         all_products = all_products.filter(brand__id__in=selected_brand_ids)
-    if min_price and min_price != '':
+    if min_price:
         all_products = all_products.filter(price__gte=float(min_price))
-    if max_price and max_price != '':
+    if max_price:
         all_products = all_products.filter(price__lte=float(max_price))
     if selected_rating and selected_rating != 'None':
-        all_products = all_products.annotate(rounded_rating=Round(Avg('reviews__rating'))).filter(rounded_rating=selected_rating)
+        all_products = all_products.annotate(
+            rounded_rating=Round(Avg('reviews__rating'))
+        ).filter(rounded_rating=selected_rating)
 
     # Calculate average rating for each product
-    for product in all_products:
-        product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
+    all_products = all_products.annotate(
+        average_rating=Avg('reviews__rating')
+    )
 
     # Paginate filtered products
-    paginator = Paginator(all_products, 12)  # Assuming 12 products per page
+    paginator = Paginator(all_products, 12)
     page_number = request.GET.get('page')
-
     try:
         products = paginator.page(page_number)
     except PageNotAnInteger:
@@ -125,19 +119,10 @@ def product_list(request):
         products = paginator.page(paginator.num_pages)
 
     # Generate pagination URL with filters
-    pagination_url = f"/products/?page={page_number}"
-    if selected_category_ids:
-        for category_id in selected_category_ids:
-            pagination_url += f"&category={category_id}"
-    if selected_brand_ids:
-        for brand_id in selected_brand_ids:
-            pagination_url += f"&brand={brand_id}"
-    if min_price:
-        pagination_url += f"&min_price={min_price}"
-    if max_price:
-        pagination_url += f"&max_price={max_price}"
-    if selected_rating:
-        pagination_url += f"&rating={selected_rating}"
+    pagination_url = request.GET.copy()
+    if 'page' in pagination_url:
+        del pagination_url['page']
+    pagination_url = pagination_url.urlencode()
 
     context = {
         "products": products,
@@ -145,7 +130,7 @@ def product_list(request):
         "selected_brand_ids": selected_brand_ids,
         "brands": brands,
         "selected_rating": selected_rating,
-        "pagination_url": pagination_url
+        "pagination_url": f"/products/?{pagination_url}"
     }
 
     return render(request, 'Core/shop-3column.html', context)
@@ -168,79 +153,82 @@ def category_list_view(request):
 
 
 def category_product_list_view(request, cid):
-    # Fetch all products related to the specific category
-    category = Category.objects.get(cid=cid)
+    category = get_object_or_404(Category, cid=cid)
     all_products = Products.objects.filter(category=category).order_by('-id')
     brands = Brand.objects.all()
 
-    # Get selected category, brand, and price range from request parameters
     selected_brand_ids = request.GET.getlist('brand')
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     selected_rating = request.GET.get('rating')
 
-    print("minimum price: ", min_price)
-    print("maximum price: ", max_price)
-
-    # Filter products based on selected brand and price range
-    if selected_brand_ids:
-        all_products = all_products.filter(brand__id__in=selected_brand_ids)
-    if min_price or max_price:
-        all_products = all_products.annotate(
-            price_num=Cast(
-                Replace('price', Value(','), Value('')), 
-                output_field=FloatField()
-            )
-        )
-    if min_price and min_price != '':
-        all_products = all_products.filter(price_num__gte=min_price)
-    if max_price and max_price != '':
-        all_products = all_products.filter(price_num__lte=max_price)
-
-    if selected_rating and selected_rating != 'None':
-        all_products = all_products.annotate(
-            rounded_rating=Round(Avg('reviews__rating'))
-        ).filter(rounded_rating=selected_rating)
+    all_products = filter_products(all_products, selected_brand_ids, min_price, max_price, selected_rating)
 
     # Calculate average rating for each product
-    for product in all_products:
-        product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
+    all_products = all_products.annotate(average_rating=Avg('reviews__rating'))
 
     # Paginate filtered products
-    paginator = Paginator(all_products, 12)  # Assuming 12 products per page
+    products_per_page = 12
+    paginator = Paginator(all_products, products_per_page)
     page_number = request.GET.get('page')
+    products = get_paginated_products(paginator, page_number)
 
-    try:
-        products = paginator.page(page_number)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        products = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range, deliver last page of results.
-        products = paginator.page(paginator.num_pages)
-
-    # Generate pagination URL with filters
-    pagination_url = f"/category/{cid}/?page={page_number}"
-    if selected_brand_ids:
-        for brand_id in selected_brand_ids:
-            pagination_url += f"&brand={brand_id}"
-    if min_price:
-        pagination_url += f"&min_price={min_price}"
-    if max_price:
-        pagination_url += f"&max_price={max_price}"
-    if selected_rating:
-        pagination_url += f"&rating={selected_rating}"
+    pagination_url = build_pagination_url(cid, selected_brand_ids, min_price, max_price, selected_rating)
 
     context = {
         "products": products,
-        "selected_brand_ids": selected_brand_ids,  # Pass selected brand IDs to template
+        "selected_brand_ids": selected_brand_ids,
         "brands": brands,
         "selected_rating": selected_rating,
-        "pagination_url": pagination_url,  # Pass pagination URL to template
-        "category": category,  # Pass the selected category to the template
+        "pagination_url": pagination_url,
+        "category": category,
     }
 
     return render(request, 'Core/category-product-list.html', context)
+
+def filter_products(products, brand_ids, min_price, max_price, rating):
+    if brand_ids:
+        products = products.filter(brand__id__in=brand_ids)
+    
+    if min_price or max_price:
+        products = products.annotate(
+            price_num=Cast(Replace('price', Value(','), Value('')), output_field=FloatField())
+        )
+        if min_price:
+            products = products.filter(price_num__gte=min_price)
+        if max_price:
+            products = products.filter(price_num__lte=max_price)
+    
+    if rating and rating != 'None':
+        products = products.annotate(rounded_rating=Round(Avg('reviews__rating'))).filter(rounded_rating=rating)
+    
+    return products
+
+def get_paginated_products(paginator, page_number):
+    try:
+        return paginator.page(page_number)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
+
+def build_pagination_url(cid, brand_ids, min_price, max_price, rating):
+    url = f"/category/{cid}/"
+    params = []
+    
+    if brand_ids:
+        params.extend([f"brand={brand_id}" for brand_id in brand_ids])
+    if min_price:
+        params.append(f"min_price={min_price}")
+    if max_price:
+        params.append(f"max_price={max_price}")
+    if rating:
+        params.append(f"rating={rating}")
+    
+    if params:
+        url += "?" + "&".join(params)
+    
+    return url
 
 
 from django.core.paginator import Paginator
@@ -503,35 +491,6 @@ def search_view(request):
     }
 
     return render(request, "core/search.html", context)
-
-
-
-"""
-def filter_product(request):
-    displayed_product_ids = request.GET.getlist('displayed_product_ids[]')
-    categories = request.GET.getlist("category[]")
-    print("Received categories:", categories)
-
-    products = Products.objects.filter(id__in=displayed_product_ids).order_by("-id").distinct()
-
-    if len(categories) > 0:
-        products = products.filter(category__id__in=categories).distinct()
-    
-    # Calculate average rating for filtered products
-    for product in products:
-        product.average_rating = ProductReview.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
-
-    # Render the filtered products HTML template
-    data = render_to_string("core/async/product-list.html", {"products": products})
-
-    # Include average rating data in the AJAX response
-    response_data = {
-        "data": data,
-        "average_ratings": {product.id: product.average_rating for product in products}
-    }
-
-    return JsonResponse(response_data)
-"""
 
 
 
@@ -1274,21 +1233,6 @@ def order_invoice(request, order_id):
 
 
 
-
-"""
-def get_cart_total(request):
-    cart_total_amount = 0
-    if 'cart_data_obj' in request.session:
-        for pid, item in request.session['cart_data_obj'].items():
-            price_for_calculation = str(item['price']).replace(',', '')
-            total_price = int(item['qty']) * float(price_for_calculation)
-            cart_total_amount += total_price
-    return JsonResponse({'cart_total_amount': cart_total_amount})
-"""
-
-
-
-
 @login_required
 def update_selected_address(request):
     if request.method == 'POST':
@@ -1331,112 +1275,3 @@ def Terms_Conditions(request):
 
 
 
-
-"""
-@login_required
-def checkout_view(request):
-    cart_total_amount = 0
-    sub_total_old_price = 0
-    total_quantity = 0
-    delivery_charges = 0
-    in_stock_items = {}
-
-    if 'cart_data_obj' in request.session:
-        for p_id, item in request.session['cart_data_obj'].items():
-            if item['stock'] == '0':
-                messages.warning(request, f"Few products in your cart are out of stock and have been removed from your cart.")
-            else:
-                in_stock_items[p_id] = item
-                price_for_calculation = item['price'].replace(',', '')
-                total_price = int(item['qty']) * float(price_for_calculation)
-                cart_total_amount += total_price
-                
-                old_price = float(str(item.get('old_price', '0')).replace(',', ''))
-                sub_total_old_price += old_price * int(item['qty'])
-                
-                total_quantity += int(item['qty'])
-
-        request.session['cart_data_obj'] = in_stock_items
-
-        if not in_stock_items:
-            messages.warning(request, "All items in your cart are out of stock.")
-            return redirect('core:cart')
-
-        total_cart_amount_old_price = sub_total_old_price
-    
-        cart_total_amount = float(cart_total_amount)
-        if cart_total_amount < 20000:
-            delivery_charges = 100
-        
-        cart_total_amount += float(delivery_charges)
-        
-        cart_total_amount = '{:,.2f}'.format(cart_total_amount).rstrip('0').rstrip('.')
-        sub_total_old_price = '{:,.2f}'.format(sub_total_old_price).rstrip('0').rstrip('.')
-        total_cart_amount_old_price = '{:,.2f}'.format(total_cart_amount_old_price).rstrip('0').rstrip('.')
-
-    discount = '{:,.2f}'.format(float(sub_total_old_price.replace(',', '')) - float(cart_total_amount.replace(',', ''))).rstrip('0').rstrip('.')
-    profile = Profile.objects.get(user=request.user)
-    address = Address.objects.filter(user=request.user).first()
-    
-    host = request.get_host()
-
-    if request.method == 'POST':
-        form_data = request.POST
-        logger.info("Form data received: %s", form_data)
-
-        if 'address-form' in form_data:
-            address = Address(
-                user=request.user,
-                title=form_data.get('title'),
-                street_address=form_data.get('address'),
-                city_district_town=form_data.get('City/District/Town'),
-                state=form_data.get('State'),
-                pincode=form_data.get('Pincode'),
-                first_name=form_data.get('first_name'),
-                last_name=form_data.get('last_name')
-            )
-            address.save()
-            messages.success(request, 'Your address has been added!')
-            return redirect('core:checkout')
-
-        if 'pay_now' in form_data:
-            try:
-                API = Instamojo(api_key=settings.API_KEY, auth_token=settings.AUTH_TOKEN, endpoint='https://test.instamojo.com/api/1.1/')
-                response = API.payment_request_create(
-                    amount=str(cart_total_amount),
-                    purpose='Order Payment',
-                    send_email=False,
-                    email="khatik.rk11@gmail.com",
-                    redirect_url='http://127.0.0:8000/payment-completed/',
-                )
-                print(response)
-                payment_request_url = response['payment_request']['longurl']
-                logger.info("Instamojo payment request created successfully.")
-                return redirect(payment_request_url)
-          
-            except Exception as e:
-              logger.error("Error creating Instamojo payment request: %s", str(e))
-              messages.error(request, f"Error: {str(e)}. Please try again later.")
-              return HttpResponse("Error creating Instamojo payment request. Please try again later.")
-
-
-    if 'selected_address_id' in request.session and request.session['selected_address_id']:
-        del request.session['selected_address_id']
-
-    if 'selected_address_id' not in request.session and address:
-        request.session['selected_address_id'] = address.id
-  
-    logger.info("Rendering checkout page.")
-    return render(request, "Core/checkout.html", {
-        "cart_data": request.session['cart_data_obj'],
-        'totalcartitems': len(request.session['cart_data_obj']),
-        'cart_total_amount': cart_total_amount,
-        'total_quantity': total_quantity,
-        'sub_total_old_price': sub_total_old_price,
-        'total_cart_amount_old_price': total_cart_amount_old_price,
-        'discount': discount,
-        'delivery_charges': delivery_charges,
-        'profile': profile,
-        'address': address,
-    })
-"""
